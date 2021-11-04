@@ -1,0 +1,41 @@
+import * as THREE from '../../../lib/three.module.js'
+import PUBLIC_METHOD from '../../../method/method.js'
+import PARAM from '../param/map.child.param.js'
+import COORDS from '../../../data/data.js'
+
+export default class{
+    constructor({group}){
+        this.init(group)
+    }
+
+
+    // init
+    init(group){
+        this.create(group)
+    }
+
+
+    // create
+    create(group){
+        const mesh = this.createPlaneMesh()
+
+        COORDS.coordinates.forEach((data, i) => {
+            const {lat, lng} = data
+            const {x, y} = PUBLIC_METHOD.getFlatCoord(lat, lng, PARAM.width, PARAM.height)
+        })
+    }
+    createPlaneMesh(){
+        const geometry = this.createPlaneGeometry()
+        const material = this.createPlaneMaterial()
+        return new THREE.InstancedMesh(geometry, material, COORDS.coordinates.length)
+    }
+    createPlaneGeometry(){
+        return new THREE.PlaneGeometry(PARAM.width, PARAM.height)
+    }
+    createPlaneMaterial(){
+        return new THREE.MeshBasicMaterial({
+            color: PARAM.color,
+            transparent: true
+        })
+    }
+}

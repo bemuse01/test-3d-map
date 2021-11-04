@@ -1,0 +1,47 @@
+@font-face {
+    font-family: OpenSansRegular;
+    src: url('../font/OpenSans-Regular.ttf');
+}
+
+
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background: black;
+    overflow: hidden;
+    position: absolute;
+}
+div#wrap{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+canvas#canvas{
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* filter: drop-shadow(0 0 10px #ffffff); */
+}
+
+
+/* map */
+div.map{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vmin;
+    height: 100vmin;
+}
+div.map-object-container{
+    width: 100%;
+    height: 100%;
+}
+div.map-object{
+    width: 100%;
+    height: 100%;
+}
