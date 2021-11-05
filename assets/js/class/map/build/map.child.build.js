@@ -19,22 +19,22 @@ export default class{
     create(group){
         this.mesh = this.createPlaneMesh()
 
-        COORDS.coordinates.forEach((data, i) => {
-            const {lat, lng} = data
-            // const {x, y, z} = PUBLIC_METHOD.getSphereCoord(lat, lng, 750)
-            const {x, y} = PUBLIC_METHOD.getFlatCoord(lat, lng, PARAM.width, PARAM.height)
-            const matrix = new THREE.Matrix4()
-            console.log(x, y)
+        // COORDS.coordinates.forEach((data, i) => {
+        //     const {lat, lng} = data
+        //     // const {x, y, z} = PUBLIC_METHOD.getSphereCoord(lat, lng, 750)
+        //     const {x, y} = PUBLIC_METHOD.getFlatCoord(lat, lng, PARAM.width, PARAM.height)
+        //     const matrix = new THREE.Matrix4()
+        //     console.log(x, y)
             
-            const scale = 0.5 + Math.random() * 2.5
+        //     const scale = 0.5 + Math.random() * 2.5
 
-            // matrix.makeScale(1, 1, scale)
-            matrix.makeTranslation(x, y, 0)
+        //     // matrix.makeScale(1, 1, scale)
+        //     matrix.makeTranslation(x, y, 0)
 
-            this.mesh.setMatrixAt(i, matrix)
-        })
+        //     this.mesh.setMatrixAt(i, matrix)
+        // })
 
-        this.mesh.position.set(-PARAM.width, PARAM.height / -2, 0)
+        // this.mesh.position.set(-PARAM.width, PARAM.height / -2, 0)
 
         group.add(this.mesh)
     }
