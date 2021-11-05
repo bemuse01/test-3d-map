@@ -17,7 +17,8 @@ export default class{
 
     // create
     create(group){
-        this.mesh = this.createPlaneMesh()
+        this.rotationGroup = new THREE.Group()
+        const plane = this.createPlaneMesh()
 
         COORDS.coordinates.forEach((data, i) => {
             const {rx, ry} = data
@@ -27,37 +28,62 @@ export default class{
 
             const matrix = new THREE.Matrix4()
             
-            // const scale = 0.5 + Math.random() * 2.5
+            const scale = 0.5 + Math.random() * 9.5
 
-            // matrix.makeScale(1, 1, scale)
-            matrix.makeTranslation(x, y, 0)
+            matrix.multiply(new THREE.Matrix4().makeTranslation(x, y, 0))
+            matrix.multiply(new THREE.Matrix4().makeScale(1, 1, scale))
+            matrix.multiply(new THREE.Matrix4().makeTranslation(0, 0, PARAM.size / 2))
 
-            this.mesh.setMatrixAt(i, matrix)
+            plane.setMatrixAt(i, matrix)
         })
 
-        this.mesh.position.set(PARAM.width / -2, PARAM.height / 2, 0)
+        plane.position.set(PARAM.width / -2, PARAM.height / 2, 0)
 
-        group.add(this.mesh)
+        // this.rotationGroup.position.z = -300
+        this.rotationGroup.rotation.x = -60 * RADIAN
+        
+        this.rotationGroup.add(plane)
+        group.add(this.rotationGroup)
     }
+    // plane
     createPlaneMesh(){
         const geometry = this.createPlaneGeometry()
         const material = this.createPlaneMaterial()
         return new THREE.InstancedMesh(geometry, material, COORDS.coordinates.length)
     }
     createPlaneGeometry(){
-        return new THREE.PlaneGeometry(PARAM.size, PARAM.size)
+        return new THREE.BoxGeometry(PARAM.size, PARAM.size, PARAM.size)
     }
     createPlaneMaterial(){
         return new THREE.MeshBasicMaterial({
             color: PARAM.color,
             transparent: true,
-            side: THREE.DoubleSide
+            opacity: 0.25,
+            depthWrite: false,
+            depthTest: false,
+            blending: THREE.AdditiveBlending
+        })
+    }
+    // plane edge
+    createEdgeMesh(geo){
+        const geometry = this.createEdgeGeometry(geo)
+        const material = this.createEdgeMaterial()
+        return new THREE.LineSegments(geometry, material)
+    }
+    createEdgeGeometry(geo){
+        return new THREE.EdgesGeometry(geo)
+    }
+    createEdgeMaterial(){
+        return new THREE.LineBasicMaterial({
+            color: PARAM.color,
+            transparent: true,
+            opacity: 0.5
         })
     }
 
 
     // animate
     animate(){
-        // this.mesh.rotation.y += 0.005
+        this.rotationGroup.rotation.z += 0.002
     }
 }
