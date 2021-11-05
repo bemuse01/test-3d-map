@@ -1,6 +1,6 @@
 export default {
-    width: 500,
-    height: 500,
+    width: 1000,
+    height: 1000,
     color: 0x32eaff,
-    size: 1
+    size: 4
 }
