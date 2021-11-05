@@ -36,6 +36,9 @@ export default class{
             matrix.multiply(new THREE.Matrix4().makeTranslation(0, 0, PARAM.size / 2))
 
             plane.setMatrixAt(i, matrix)
+
+            // edge
+            // const planeEdge = this.createEdgeMesh()
         })
 
         plane.position.set(PARAM.width / -2, PARAM.height / 2, 0)
