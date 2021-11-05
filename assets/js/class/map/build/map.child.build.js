@@ -28,7 +28,8 @@ export default class{
 
             const matrix = new THREE.Matrix4()
             
-            const scale = 0.5 + Math.random() * 9.5
+            const noise = SIMPLEX.noise2D(i * 0.1, i * 6 * 0.01)
+            const scale = PUBLIC_METHOD.normalize(noise, 0.25, 10, -1, 1)
 
             matrix.multiply(new THREE.Matrix4().makeTranslation(x, y, 0))
             matrix.multiply(new THREE.Matrix4().makeScale(1, 1, scale))
