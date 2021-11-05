@@ -17,20 +17,26 @@ export default class{
 
     // create
     create(group){
-        const mesh = this.createPlaneMesh()
+        this.mesh = this.createPlaneMesh()
 
         COORDS.coordinates.forEach((data, i) => {
             const {lat, lng} = data
+            // const {x, y, z} = PUBLIC_METHOD.getSphereCoord(lat, lng, 750)
             const {x, y} = PUBLIC_METHOD.getFlatCoord(lat, lng, PARAM.width, PARAM.height)
             const matrix = new THREE.Matrix4()
+            console.log(x, y)
             
             const scale = 0.5 + Math.random() * 2.5
 
-            matrix.makeScale(1, 1, scale)
+            // matrix.makeScale(1, 1, scale)
             matrix.makeTranslation(x, y, 0)
 
-            mesh.setMatrixAt(i, matrix)
+            this.mesh.setMatrixAt(i, matrix)
         })
+
+        this.mesh.position.set(-PARAM.width, PARAM.height / -2, 0)
+
+        group.add(this.mesh)
     }
     createPlaneMesh(){
         const geometry = this.createPlaneGeometry()
@@ -38,12 +44,19 @@ export default class{
         return new THREE.InstancedMesh(geometry, material, COORDS.coordinates.length)
     }
     createPlaneGeometry(){
-        return new THREE.PlaneGeometry(PARAM.width, PARAM.height)
+        return new THREE.PlaneGeometry(PARAM.size, PARAM.size)
     }
     createPlaneMaterial(){
         return new THREE.MeshBasicMaterial({
             color: PARAM.color,
-            transparent: true
+            transparent: true,
+            side: THREE.DoubleSide
         })
+    }
+
+
+    // animate
+    animate(){
+        // this.mesh.rotation.y += 0.005
     }
 }

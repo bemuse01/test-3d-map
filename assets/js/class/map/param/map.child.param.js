@@ -1,5 +1,6 @@
 export default {
     width: 500,
     height: 500,
-    color: 0x32eaff
+    color: 0x32eaff,
+    size: 1
 }

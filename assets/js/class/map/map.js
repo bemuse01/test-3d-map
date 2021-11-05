@@ -1,5 +1,6 @@
 import * as THREE from '../../lib/three.module.js'
 import PUBLIC_METHOD from '../../method/method.js'
+import CHILD from './build/map.child.build.js'
 
 export default class{
     constructor(){
@@ -11,6 +12,7 @@ export default class{
         }
 
         this.modules = {
+            child: CHILD
         }
         this.group = {}
         this.comp = {}
