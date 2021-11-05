@@ -22,6 +22,14 @@ export default class{
         COORDS.coordinates.forEach((data, i) => {
             const {lat, lng} = data
             const {x, y} = PUBLIC_METHOD.getFlatCoord(lat, lng, PARAM.width, PARAM.height)
+            const matrix = new THREE.Matrix4()
+            
+            const scale = 0.5 + Math.random() * 2.5
+
+            matrix.makeScale(1, 1, scale)
+            matrix.makeTranslation(x, y, 0)
+
+            mesh.setMatrixAt(i, matrix)
         })
     }
     createPlaneMesh(){
