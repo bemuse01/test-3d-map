@@ -34,7 +34,7 @@ export default class{
 
             matrix.multiply(new THREE.Matrix4().makeTranslation(x, y, 0))
             matrix.multiply(new THREE.Matrix4().makeScale(1, 1, scale))
-            matrix.multiply(new THREE.Matrix4().makeTranslation(0, 0, PARAM.size / 2))
+            matrix.multiply(new THREE.Matrix4().makeTranslation(0, 100, PARAM.size / 2))
 
             plane.setMatrixAt(i, matrix)
             
