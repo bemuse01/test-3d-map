@@ -28,7 +28,7 @@ export default class{
         const mesh = this.createMesh()
 
         // positionGroup.position.y = -CHILD_PARAM.height / 2
-        positionGroup.position.z = -15
+        positionGroup.position.z = -20
 
         this.rotationGroup.rotation.x = CHILD_PARAM.rotation * RADIAN
 

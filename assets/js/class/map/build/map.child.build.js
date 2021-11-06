@@ -29,7 +29,7 @@ export default class{
 
             const matrix = new THREE.Matrix4()
             
-            const noise = SIMPLEX.noise2D(i * 0.01, i * 6 * 0.01)
+            const noise = SIMPLEX.noise3D(x * 0.002, y * 0.002, i * 0.01)
             const scale = PUBLIC_METHOD.normalize(noise, 0.1, 10, -1, 1)
 
             matrix.multiply(new THREE.Matrix4().makeTranslation(x, y, 0))
@@ -66,7 +66,7 @@ export default class{
         return new THREE.MeshBasicMaterial({
             color: PARAM.color,
             transparent: true,
-            opacity: 0.25,
+            opacity: 0.3,
             depthWrite: false,
             depthTest: false,
             blending: THREE.AdditiveBlending

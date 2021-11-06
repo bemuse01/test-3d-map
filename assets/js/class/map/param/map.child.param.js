@@ -1,7 +1,7 @@
 export default {
-    width: 1300,
-    height: 1300,
+    width: 1600,
+    height: 1600,
     color: 0x32eaff,
     size: 6,
-    rotation: -60
+    rotation: -65
 }
