@@ -17,6 +17,7 @@ export default class{
 
     // create
     create(group){
+        const positionGroup = new THREE.Group()
         this.rotationGroup = new THREE.Group()
         const plane = this.createPlaneMesh()
 
@@ -28,25 +29,28 @@ export default class{
 
             const matrix = new THREE.Matrix4()
             
-            const noise = SIMPLEX.noise2D(i * 0.1, i * 6 * 0.01)
-            const scale = PUBLIC_METHOD.normalize(noise, 0.25, 10, -1, 1)
+            const noise = SIMPLEX.noise2D(i * 0.01, i * 6 * 0.01)
+            const scale = PUBLIC_METHOD.normalize(noise, 0.1, 10, -1, 1)
 
             matrix.multiply(new THREE.Matrix4().makeTranslation(x, y, 0))
             matrix.multiply(new THREE.Matrix4().makeScale(1, 1, scale))
             matrix.multiply(new THREE.Matrix4().makeTranslation(0, 0, PARAM.size / 2))
 
             plane.setMatrixAt(i, matrix)
-
+            
             // edge
-            // const planeEdge = this.createEdgeMesh()
+            // const planeEdge = this.createEdgeMesh(new THREE.BoxGeometry(PARAM.size, PARAM.size, PARAM.size))
+            // planeEdge.applyMatrix4(matrix)
+
+            // positionGroup.add(planeEdge)
         })
 
-        plane.position.set(PARAM.width / -2, PARAM.height / 2, 0)
+        positionGroup.position.set(PARAM.width / -2, PARAM.height / 2, 0)
 
-        // this.rotationGroup.position.z = -300
-        this.rotationGroup.rotation.x = -60 * RADIAN
+        this.rotationGroup.rotation.x = PARAM.rotation * RADIAN
         
-        this.rotationGroup.add(plane)
+        positionGroup.add(plane)
+        this.rotationGroup.add(positionGroup)
         group.add(this.rotationGroup)
     }
     // plane
@@ -81,6 +85,8 @@ export default class{
         return new THREE.LineBasicMaterial({
             color: PARAM.color,
             transparent: true,
+            depthWrite: false,
+            depthTest: false,
             opacity: 0.5
         })
     }
