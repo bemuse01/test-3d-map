@@ -66,7 +66,7 @@ export default class{
         return new THREE.MeshBasicMaterial({
             color: PARAM.color,
             transparent: true,
-            opacity: 0.3,
+            opacity: 0.35,
             depthWrite: false,
             depthTest: false,
             blending: THREE.AdditiveBlending
