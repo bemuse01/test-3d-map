@@ -1,7 +1,7 @@
 import * as THREE from '../../../lib/three.module.js'
 import PUBLIC_METHOD from '../../../method/method.js'
 import PARAM from '../param/map.child.param.js'
-import COORDS from '../../../data/points.js'
+import COORDS from '../../../data/jp_points.js'
 
 export default class{
     constructor({group}){

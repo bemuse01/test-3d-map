@@ -1,5 +1,5 @@
 import * as THREE from '../../../lib/three.module.js'
-import COORDS from '../../../data/points.js'
+import COORDS from '../../../data/jp_points.js'
 import CHILD_PARAM from '../param/map.child.param.js'
 
 export default class{
