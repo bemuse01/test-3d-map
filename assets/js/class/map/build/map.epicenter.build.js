@@ -6,11 +6,14 @@ export default class{
     constructor({group}){
         this.param = {
             color: 0xff3232,
-            count: 4,
+            count: 3,
+            iter: 3,
             size: 10,
-            seg: 16,
+            seg: 32,
             z: 50
         }
+
+        this.tw = []
 
         this.init(group)
     }
@@ -19,6 +22,10 @@ export default class{
     // init
     init(group){
         this.create(group)
+        
+        const groups = this.rotationGroup.children[0].children
+        
+        groups.forEach((group, i) => this.createTween(group.children, i))
     }
 
 
@@ -29,16 +36,23 @@ export default class{
         const {coordinates} = COORDS
 
         for(let i = 0; i < this.param.count; i++){
-            const {rx, ry} = coordinates[~~(Math.random() * coordinates.length)]
+            const random = ~~(Math.random() * coordinates.length)
+
+            const local = new THREE.Group()
+
+            const {rx, ry} = coordinates[random]
 
             const x = rx * CHILD_PARAM.width
             const y = ry * -CHILD_PARAM.height
 
-            const mesh = this.createMesh()
+            for(let j = 0; j < this.param.iter; j++){
+                const mesh = this.createMesh()
+                mesh.position.set(x, y, this.param.z)
+                
+                local.add(mesh)
+            }
 
-            mesh.position.set(x, y, this.param.z)
-
-            positionGroup.add(mesh)
+            positionGroup.add(local)
         }
 
         positionGroup.position.set(CHILD_PARAM.width / -2, CHILD_PARAM.height / 2, 0)
@@ -67,19 +81,44 @@ export default class{
         return new THREE.LineBasicMaterial({
             color: this.param.color,
             transparent: true,
-            opacity: 1.0
+            opacity: 0
         })
     }
     // tween
-    createTween(){
-        const children = this.rotationGroup.children[0].children
-
+    createTween(children, idx){
         children.forEach((child, i) => {
-            const start = {opacity: 0, scale: 1}
-            const end = {opacity: [0, 0.5, 1, 0.5, 0], scale: 3}
+            const start = {opacity: 0, scale: 0.2}
+            const end = {opacity: [0, 0.25, 0.5, 1, 0.5, 0], scale: 5}
 
-            const tw = new TWEEN.Tween()
+            const tw = new TWEEN.Tween(start)
+            .to(end, 1000)
+            .onUpdate(() => this.updateTween(child, start))
+            .delay(i * 200 + idx * 300)
+            .onComplete(() => this.completeTween(children, i === this.param.iter - 1, idx))
+            .start()
         })
+    }
+    updateTween(child, start){
+        const {opacity, scale} = start
+        child.scale.set(scale, scale, 1)
+        child.material.opacity = opacity
+    }
+    completeTween(children, isLast, idx){
+        if(isLast){
+            const {coordinates} = COORDS
+            const random = ~~(Math.random() * coordinates.length)
+    
+            children.forEach(child => {
+                const {rx, ry} = coordinates[random]
+    
+                const x = rx * CHILD_PARAM.width
+                const y = ry * -CHILD_PARAM.height
+    
+                child.position.set(x, y, this.param.z)
+            })
+
+            this.createTween(children, idx)
+        }
     }
 
 
