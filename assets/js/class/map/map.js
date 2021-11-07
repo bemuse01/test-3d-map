@@ -3,6 +3,7 @@ import PUBLIC_METHOD from '../../method/method.js'
 import CHILD from './build/map.child.build.js'
 import MIRROR from './build/map.mirror.build.js'
 import EPICENTER from './build/map.epicenter.build.js'
+import RADAR from './build/map.radar.build.js'
 
 export default class{
     constructor(){
@@ -16,7 +17,8 @@ export default class{
         this.modules = {
             MIRROR: MIRROR,
             child: CHILD,
-            epicenter: EPICENTER
+            epicenter: EPICENTER,
+            radar: RADAR
         }
         this.group = {}
         this.comp = {}

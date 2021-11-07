@@ -84,6 +84,8 @@ export default class{
             opacity: 0
         })
     }
+
+
     // tween
     createTween(children, idx){
         children.forEach((child, i) => {
@@ -100,6 +102,7 @@ export default class{
     }
     updateTween(child, start){
         const {opacity, scale} = start
+        
         child.scale.set(scale, scale, 1)
         child.material.opacity = opacity
     }
