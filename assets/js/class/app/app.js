@@ -29,6 +29,7 @@ export default class{
         this.renderer.setPixelRatio(RATIO)
         this.renderer.setClearColor(0x000000, 0.0)
         this.renderer.setClearAlpha(0.0)
+        this.renderer.autoClear = false
     }
 
 

@@ -104,6 +104,8 @@ export default class{
         const left = rect.left
         const bottom = app.renderer.domElement.clientHeight - rect.bottom
 
+        // app.renderer.clear()
+
         app.renderer.setScissor(left, bottom, width, height)
         app.renderer.setViewport(left, bottom, width, height)
 
