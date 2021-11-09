@@ -23,17 +23,15 @@ export default class{
 
     // create
     create(group){
-        this.rotationGroup = new THREE.Group()
+        this.wrapper = new THREE.Group()
 
         for(let i = 0; i < this.param.count; i++){
             const mesh = this.createMesh()
 
-            this.rotationGroup.add(mesh)
+            this.wrapper.add(mesh)
         }
 
-        this.rotationGroup.rotation.x = CHILD_PARAM.rotation * RADIAN
-
-        group.add(this.rotationGroup)
+        group.add(this.wrapper)
     }
     createMesh(){
         const geometry = this.createGeometry()
@@ -63,7 +61,7 @@ export default class{
     createTween(){
         const start = {opacity: 0, scale: 0.1}
         const end = {opacity: [0, 0.1, 0.2, 0.1, 0], scale: 80}
-        const children = this.rotationGroup.children
+        const children = this.wrapper.children
 
         children.forEach((child, i) => {
             const tw = new TWEEN.Tween(start)

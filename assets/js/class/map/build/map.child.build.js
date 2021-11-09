@@ -18,7 +18,7 @@ export default class{
     // create
     create(group){
         const positionGroup = new THREE.Group()
-        this.rotationGroup = new THREE.Group()
+        this.wrapper = new THREE.Group()
         const plane = this.createPlaneMesh()
 
         COORDS.coordinates.forEach((data, i) => {
@@ -34,7 +34,7 @@ export default class{
 
             matrix.multiply(new THREE.Matrix4().makeTranslation(x, y, 0))
             matrix.multiply(new THREE.Matrix4().makeScale(1, 1, scale))
-            matrix.multiply(new THREE.Matrix4().makeTranslation(0, 100, PARAM.size / 2))
+            matrix.multiply(new THREE.Matrix4().makeTranslation(0, 0, PARAM.size / 2))
 
             plane.setMatrixAt(i, matrix)
             
@@ -45,13 +45,11 @@ export default class{
             // positionGroup.add(planeEdge)
         })
 
-        positionGroup.position.set(PARAM.width / -2, PARAM.height / 2, 0)
+        positionGroup.position.set(PARAM.width / -2, PARAM.height / 2 + PARAM.y, 0)
 
-        this.rotationGroup.rotation.x = PARAM.rotation * RADIAN
-        
         positionGroup.add(plane)
-        this.rotationGroup.add(positionGroup)
-        group.add(this.rotationGroup)
+        this.wrapper.add(positionGroup)
+        group.add(this.wrapper)
     }
     // plane
     createPlaneMesh(){
@@ -93,7 +91,4 @@ export default class{
 
 
     // animate
-    animate(){
-        this.rotationGroup.rotation.z += 0.002
-    }
 }

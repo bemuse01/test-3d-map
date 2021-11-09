@@ -23,18 +23,15 @@ export default class{
     // create
     create(group){
         const positionGroup = new THREE.Group()
-        this.rotationGroup = new THREE.Group() 
+        this.wrapper = new THREE.Group() 
         
         const mesh = this.createMesh()
 
-        // positionGroup.position.y = -CHILD_PARAM.height / 2
         positionGroup.position.z = -20
 
-        this.rotationGroup.rotation.x = CHILD_PARAM.rotation * RADIAN
-
         positionGroup.add(mesh)
-        this.rotationGroup.add(positionGroup)
-        group.add(this.rotationGroup)
+        this.wrapper.add(positionGroup)
+        group.add(this.wrapper)
     }
     createMesh(){
         const geometry = this.createGeometry()

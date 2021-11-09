@@ -6,14 +6,12 @@ export default class{
     constructor({group}){
         this.param = {
             color: 0xff3232,
-            count: 4,
+            count: 5,
             iter: 3,
             size: 10,
             seg: 32,
             z: 50
         }
-
-        this.tw = []
 
         this.init(group)
     }
@@ -23,7 +21,7 @@ export default class{
     init(group){
         this.create(group)
         
-        const groups = this.rotationGroup.children[0].children
+        const groups = this.wrapper.children[0].children
         
         groups.forEach((group, i) => this.createTween(group.children, i))
     }
@@ -32,7 +30,7 @@ export default class{
     // create
     create(group){
         const positionGroup = new THREE.Group()
-        this.rotationGroup = new THREE.Group()
+        this.wrapper = new THREE.Group()
         const {coordinates} = COORDS
 
         for(let i = 0; i < this.param.count; i++){
@@ -55,12 +53,10 @@ export default class{
             positionGroup.add(local)
         }
 
-        positionGroup.position.set(CHILD_PARAM.width / -2, CHILD_PARAM.height / 2, 0)
+        positionGroup.position.set(CHILD_PARAM.width / -2, CHILD_PARAM.height / 2 + CHILD_PARAM.y, 0)
 
-        this.rotationGroup.rotation.x = CHILD_PARAM.rotation * RADIAN
-
-        this.rotationGroup.add(positionGroup)
-        group.add(this.rotationGroup)
+        this.wrapper.add(positionGroup)
+        group.add(this.wrapper)
     }
     createMesh(){
         const geometry = this.createGeometry()
@@ -126,7 +122,4 @@ export default class{
 
 
     // animate
-    animate(){
-        this.rotationGroup.rotation.z += 0.002
-    }
 }

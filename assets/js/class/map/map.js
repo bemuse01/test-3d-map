@@ -1,9 +1,11 @@
 import * as THREE from '../../lib/three.module.js'
+import PARAM from './param/map.param.js'
 import PUBLIC_METHOD from '../../method/method.js'
 import CHILD from './build/map.child.build.js'
 import MIRROR from './build/map.mirror.build.js'
 import EPICENTER from './build/map.epicenter.build.js'
 import RADAR from './build/map.radar.build.js'
+import CONNECTION from './build/map.connection.build.js'
 
 export default class{
     constructor(){
@@ -18,7 +20,8 @@ export default class{
             MIRROR: MIRROR,
             child: CHILD,
             epicenter: EPICENTER,
-            radar: RADAR
+            radar: RADAR,
+            connection: CONNECTION
         }
         this.group = {}
         this.comp = {}
@@ -81,6 +84,8 @@ export default class{
             const instance = this.modules[module]
             const group = this.group[module]
 
+            group.rotation.x = PARAM.rotation * RADIAN
+
             this.comp[module] = new instance({group, size: this.size, camera: this.camera})
         }
     }
@@ -90,6 +95,7 @@ export default class{
     animate({app}){
         this.render(app)
         this.animateObject()
+        this.rotationGroup()
     }
     render(app){
         const rect = this.element.getBoundingClientRect()
@@ -108,6 +114,11 @@ export default class{
         for(let i in this.comp){
             if(!this.comp[i] || !this.comp[i].animate) continue
             this.comp[i].animate()
+        }
+    }
+    rotationGroup(){
+        for(const group in this.group){
+            this.group[group].rotation.z += 0.002
         }
     }
 
