@@ -62,7 +62,7 @@ export default class{
     // tween
     createTween(){
         const start = {opacity: 0, scale: 0.1}
-        const end = {opacity: [0, 0.075, 0.15, 0.075, 0], scale: 80}
+        const end = {opacity: [0, 0.1, 0.2, 0.1, 0], scale: 80}
         const children = this.rotationGroup.children
 
         children.forEach((child, i) => {
