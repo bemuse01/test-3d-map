@@ -87,18 +87,32 @@ export default class{
 
     // tween
     createTween(mesh, idx){
-        const start = {draw: 0}
-        const end = {draw: this.param.seg}
+        const start1 = {draw: 0}
+        const end1 = {draw: this.param.seg}
 
-        const tw = new TWEEN.Tween(start)
-        .to(end, 2000)
-        .onUpdate(() => this.updateTween(mesh, start))
-        .onComplete(() => this.completeTween(mesh, idx))
+        const start2 = {draw: this.param.seg}
+        const end2 = {draw: 0}
+
+        const tw1 = new TWEEN.Tween(start1)
+        .to(end1, 2000)
         .delay(idx * 500)
-        .start()
+        .onUpdate(() => this.updateTween(mesh, start1))
+        .onComplete(() => this.completeTween1(mesh))
+
+        const tw2 = new TWEEN.Tween(start2)
+        .to(end2, 2000)
+        .delay(2000)
+        .onUpdate(() => this.updateTween(mesh, start2))
+        .onComplete(() => this.completeTween(mesh, idx))
+
+        tw1.chain(tw2)
+        tw1.start()
     }
     updateTween(mesh, {draw}){
         mesh.geometry.setDrawRange(0, draw)
+    }
+    completeTween1(mesh){
+        mesh.rotation.y += 180 * RADIAN
     }
     completeTween(mesh, idx){
         const {cx, cy, theta, radius} = METHOD.getCircleProp({coords: COORDS, ...CHILD_PARAM})
