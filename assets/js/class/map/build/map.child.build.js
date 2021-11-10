@@ -37,6 +37,8 @@ export default class{
             matrix.multiply(new THREE.Matrix4().makeTranslation(0, 0, PARAM.size / 2))
 
             plane.setMatrixAt(i, matrix)
+
+            // if(i === 80 || i === 503) plane.setColorAt(i, new THREE.Color(0xffffff))
             
             // edge
             // const planeEdge = this.createEdgeMesh(new THREE.BoxGeometry(PARAM.size, PARAM.size, PARAM.size))

@@ -27,21 +27,35 @@ export default class{
         const positionGroup = new THREE.Group()
         this.wrapper = new THREE.Group()
 
-        const p1 = COORDS.coordinates[~~(Math.random() * COORDS.coordinates.length)]
-        const p2 = COORDS.coordinates[~~(Math.random() * COORDS.coordinates.length)]
+        const r1 = ~~(Math.random() * COORDS.coordinates.length)
+        const r2 = ~~(Math.random() * COORDS.coordinates.length)
+        const p1 = COORDS.coordinates[r1]
+        const p2 = COORDS.coordinates[r2]
+        const pp1 = {x: p1.rx * CHILD_PARAM.width, y: p1.ry * -CHILD_PARAM.height}
+        const pp2 = {x: p2.rx * CHILD_PARAM.width, y: p2.ry * -CHILD_PARAM.height}
 
-        const {rx, ry, rdist} = METHOD.getCenterPoint(p1, p2)
+        const {rx, ry} = METHOD.getCenterPoint(p1, p2)
         const cx = rx * CHILD_PARAM.width
         const cy = ry * -CHILD_PARAM.height
-        const dist = rdist * CHILD_PARAM.width
+        const dist = Math.sqrt((pp1.x - pp2.x) ** 2 + (pp1.y - pp2.y) ** 2) / 2
         const deg = 180 / this.param.seg
+
+        const pp3 = pp1.y > pp2.y ? pp1 : pp2
+        const v1 = new THREE.Vector2(pp3.x - cx, pp3.y - cy)
+        const v2 = new THREE.Vector2(pp3.x + cx, 0)
+        const out = v1.x * v2.x + v1.y * v2.y
+        const dot = Math.sqrt(v1.x ** 2 + v1.y ** 2) * Math.sqrt(v2.x ** 2 + v2.y ** 2)
+        const theta = Math.acos(out / dot)
+
+        // console.log(theta)
 
         const mesh = this.createLineMesh({dist, deg})
         mesh.position.set(cx, cy, 0)
         mesh.rotation.x = 90 * RADIAN
+        mesh.rotation.y = theta
         // mesh.position.y = CHILD_PARAM.y
 
-        positionGroup.position.set(CHILD_PARAM.width / -2, CHILD_PARAM.height / 2 + CHILD_PARAM.y, 0)
+        positionGroup.position.set(CHILD_PARAM.width / -2, CHILD_PARAM.height / 2 + CHILD_PARAM.y, 50)
 
         positionGroup.add(mesh)
         this.wrapper.add(positionGroup)
@@ -68,6 +82,8 @@ export default class{
 
         geometry.setAttribute('position', new THREE.BufferAttribute(position, 3))
 
+        // geometry.setDrawRange(0, 0)
+
         return geometry
     }
     createLineMaterial(){
@@ -80,5 +96,11 @@ export default class{
     }
 
 
+    // tween
+
+
     // animate
+    animate(){
+
+    }
 }

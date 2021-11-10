@@ -4,7 +4,7 @@ export default {
         const ydist = Math.abs(p1.ry - p2.ry) / 2
         const rx = Math.max(p1.rx, p2.rx) - xdist
         const ry = Math.max(p1.ry, p2.ry) - ydist
-        return {rx, ry, rdist: xdist}
+        return {rx, ry}
     },
     createPosition(seg){
         const position = []
