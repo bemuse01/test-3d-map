@@ -8,7 +8,7 @@ export default class{
         this.param = {
             color: 0x32eaff,
             seg: 360,
-            count: 1
+            count: 3
         }
 
         this.deg = 180 / this.param.seg
@@ -95,7 +95,7 @@ export default class{
 
         const tw1 = new TWEEN.Tween(start1)
         .to(end1, 2000)
-        .delay(idx * 500)
+        .delay(idx * 1000)
         .onUpdate(() => this.updateTween(mesh, start1))
         .onComplete(() => this.completeTween1(mesh))
 
