@@ -8,7 +8,7 @@ export default class{
         this.param = {
             color: 0x32eaff,
             seg: 360,
-            count: 2
+            count: 1
         }
 
         this.deg = 180 / this.param.seg
@@ -21,6 +21,10 @@ export default class{
     // init
     init(group){
         this.create(group)
+
+        const children = this.wrapper.children[0].children
+
+        children.forEach((child, i) => this.createTween(child, i))
     }
 
 
@@ -67,7 +71,7 @@ export default class{
 
         geometry.setAttribute('position', new THREE.BufferAttribute(position, 3))
 
-        // geometry.setDrawRange(0, 0)
+        geometry.setDrawRange(0, 0)
 
         return geometry
     }
@@ -82,22 +86,30 @@ export default class{
 
 
     // tween
-    createTween(idx){
+    createTween(mesh, idx){
         const start = {draw: 0}
         const end = {draw: this.param.seg}
 
         const tw = new TWEEN.Tween(start)
         .to(end, 2000)
-        .onUpdate(() => this.updateTween(idx))
-        .onComplete(() => this.completeTween(idx))
-        .delay(i * 500)
+        .onUpdate(() => this.updateTween(mesh, start))
+        .onComplete(() => this.completeTween(mesh, idx))
+        .delay(idx * 500)
         .start()
     }
-    updateTween(idx){
-
+    updateTween(mesh, {draw}){
+        mesh.geometry.setDrawRange(0, draw)
     }
-    completeTween(idx){
+    completeTween(mesh, idx){
+        const {cx, cy, theta, radius} = METHOD.getCircleProp({coords: COORDS, ...CHILD_PARAM})
 
+        mesh.position.set(cx, cy, 0)
+        mesh.rotation.y = theta
+
+        mesh.geometry.dispose()
+        mesh.geometry = this.createLineGeometry(radius)
+
+        this.createTween(mesh, idx)
     }
 
 
