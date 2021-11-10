@@ -103,7 +103,7 @@ export default class{
         .to(end2, 2000)
         .delay(2000)
         .onUpdate(() => this.updateTween(mesh, start2))
-        .onComplete(() => this.completeTween(mesh, idx))
+        .onComplete(() => this.completeTween2(mesh, idx))
 
         tw1.chain(tw2)
         tw1.start()
@@ -114,7 +114,7 @@ export default class{
     completeTween1(mesh){
         mesh.rotation.y += 180 * RADIAN
     }
-    completeTween(mesh, idx){
+    completeTween2(mesh, idx){
         const {cx, cy, theta, radius} = METHOD.getCircleProp({coords: COORDS, ...CHILD_PARAM})
 
         mesh.position.set(cx, cy, 0)
