@@ -128,9 +128,4 @@ export default class{
 
 
     // animate
-    animate(){
-        // this.draw += 2.5
-
-        // geometry.setDrawRange(0, this.draw)
-    }
 }
