@@ -25,8 +25,9 @@ export default class{
 
         const lines = this.wrapper.children[0].children[0].children
         const circles = this.wrapper.children[0].children[1].children
+        const effects = this.wrapper.children[0].children[2].children
 
-        lines.forEach((line, i) => this.createLineTween(line, circles[i]))
+        lines.forEach((line, i) => this.createLineTween(line, circles[i], effects[i]))
     }
 
 
@@ -35,6 +36,7 @@ export default class{
         const positionGroup = new THREE.Group()
         const lineGroup = new THREE.Group()
         const circleGroup = new THREE.Group()
+        const effectGroup = new THREE.Group()
         this.wrapper = new THREE.Group()
 
         for(let i = 0; i < this.param.count; i++){
@@ -45,14 +47,19 @@ export default class{
 
             // circle
             const circle = this.createCircleMesh()
-            circle.scale.set(0, 0, 0)
+            circle.scale.set(0, 0, 1)
             circleGroup.add(circle)
+
+            // effect
+            const effect = this.createEffectMesh()
+            effectGroup.add(effect)
         }
 
         positionGroup.position.set(CHILD_PARAM.width / -2, CHILD_PARAM.height / 2 + CHILD_PARAM.y, 50)
 
         positionGroup.add(lineGroup)
         positionGroup.add(circleGroup)
+        positionGroup.add(effectGroup)
         this.wrapper.add(positionGroup)
         group.add(this.wrapper)
     }
@@ -105,11 +112,36 @@ export default class{
             transparent: true
         })
     }
+    // effect
+    createEffectMesh(){
+        const geometry = this.createEffectGeometry()
+        const material = this.createEffectMaterial()
+        return new THREE.Line(geometry, material)
+    }
+    createEffectGeometry(){
+        const position = [...new THREE.CircleGeometry(this.param.radius, 32).attributes.position.array.slice(3)]
+        position.push(...position.slice(0, 3))
+
+        const geometry = new THREE.BufferGeometry()
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(position), 3))
+
+        return geometry
+    }
+    createEffectMaterial(){
+        return new THREE.LineBasicMaterial({
+            color: this.param.color,
+            transparent: true,
+            depthWrite: false,
+            depthTest: false,
+            opacity: 0
+        })
+    }
 
 
     // tween
     // line tween
-    createLineTween(line, circle){
+    createLineTween(line, circle, effect){
         const circleProp = METHOD.getCircleProp({coords: COORDS, ...CHILD_PARAM})
 
         const start1 = {draw: 0}
@@ -127,20 +159,19 @@ export default class{
         .delay(Math.random() * 3000)
         .onStart(() => this.beforeLineTween(line, circleProp))
         .onUpdate(() => this.updateLineTween(line, start1))
-        .onComplete(() => this.completeLineTween1(line, circle, circleProp))
+        .onComplete(() => this.completeLineTween1(line, circle, effect, circleProp))
 
         // leave
         const tw2 = new TWEEN.Tween(start2)
         .to(end2, time)
         .delay(Math.random() * 1000 + 1000)
         .onUpdate(() => this.updateLineTween(line, start2))
-        .onComplete(() => this.completeLineTween2(line, circle))
+        .onComplete(() => this.completeLineTween2(line, circle, effect))
 
         tw1.chain(tw2)
         tw1.start()
     }
     beforeLineTween(line, {cx, cy, theta, radius}){
-        console.log(line)
         line.position.set(cx, cy, 0)
         line.rotation.y = theta
 
@@ -150,12 +181,13 @@ export default class{
     updateLineTween(line, {draw}){
         line.geometry.setDrawRange(0, draw)
     }
-    completeLineTween1(line, circle, {dest}){
-        this.createCircleTween1(circle, dest.x, dest.y)
+    completeLineTween1(line, circle, effect, {dest}){
         line.rotation.y += 180 * RADIAN
+        this.createCircleTween1(circle, dest.x, dest.y)
+        this.createEffectTween(effect, dest.x, dest.y)
     }
-    completeLineTween2(line, circle){
-        this.createLineTween(line, circle)
+    completeLineTween2(line, circle, effect){
+        this.createLineTween(line, circle, effect)
         this.createCircleTween2(circle)
     }
     // circle tween
@@ -164,7 +196,7 @@ export default class{
         const end = {scale: 1}
 
         const tw = new TWEEN.Tween(start)
-        .to(end, 200)
+        .to(end, 150)
         .onStart(() => this.beforeCircleTween(mesh, x, y))
         .onUpdate(() => this.updateCircleTween(mesh, start))
         .start()
@@ -174,15 +206,34 @@ export default class{
         const end = {scale: 0}
 
         const tw = new TWEEN.Tween(start)
-        .to(end, 200)
+        .to(end, 150)
         .onUpdate(() => this.updateCircleTween(mesh, start))
         .start()
     }
     updateCircleTween(mesh, {scale}){
-        mesh.scale.set(scale, scale, 0)
+        mesh.scale.set(scale, scale, 1)
     }
     beforeCircleTween(mesh, x, y){
         mesh.position.set(x, y, 0)
+    }
+    // effect tween
+    createEffectTween(mesh, x, y){
+        const start = {opacity: 0, scale: 1}
+        const end = {opacity: [0, 0.25, 0.5, 0.25, 0], scale: 3.5}
+
+        const tw = new TWEEN.Tween(start)
+        .to(end, 1200)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .onStart(() => this.beforeEffectTween(mesh, x, y))
+        .onUpdate(() => this.updateEffectTween(mesh, start))
+        .start()
+    }
+    beforeEffectTween(mesh, x, y){
+        mesh.position.set(x, y, 0)
+    }
+    updateEffectTween(mesh, {scale, opacity}){
+        mesh.scale.set(scale, scale, 1)
+        mesh.material.opacity = opacity
     }
 
 

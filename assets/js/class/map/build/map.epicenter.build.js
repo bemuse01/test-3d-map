@@ -77,6 +77,8 @@ export default class{
         return new THREE.LineBasicMaterial({
             color: this.param.color,
             transparent: true,
+            depthWrite: false,
+            depthTest: false,
             opacity: 0
         })
     }
