@@ -8,7 +8,7 @@ export default class{
         this.param = {
             color: 0x32eaff,
             seg: 360,
-            count: 3
+            count: 4
         }
 
         this.deg = 180 / this.param.seg
@@ -24,7 +24,7 @@ export default class{
 
         const children = this.wrapper.children[0].children
 
-        children.forEach((child, i) => this.createTween(child, i))
+        children.forEach(child => this.createTween(child))
     }
 
 
@@ -86,7 +86,7 @@ export default class{
 
 
     // tween
-    createTween(mesh, idx){
+    createTween(mesh){
         const start1 = {draw: 0}
         const end1 = {draw: this.param.seg}
 
@@ -95,7 +95,7 @@ export default class{
 
         const tw1 = new TWEEN.Tween(start1)
         .to(end1, 2000)
-        .delay(idx * 1000)
+        .delay(Math.random() * 3000)
         .onUpdate(() => this.updateTween(mesh, start1))
         .onComplete(() => this.completeTween1(mesh))
 
@@ -103,7 +103,7 @@ export default class{
         .to(end2, 2000)
         .delay(2000)
         .onUpdate(() => this.updateTween(mesh, start2))
-        .onComplete(() => this.completeTween2(mesh, idx))
+        .onComplete(() => this.completeTween2(mesh))
 
         tw1.chain(tw2)
         tw1.start()
@@ -114,7 +114,7 @@ export default class{
     completeTween1(mesh){
         mesh.rotation.y += 180 * RADIAN
     }
-    completeTween2(mesh, idx){
+    completeTween2(mesh){
         const {cx, cy, theta, radius} = METHOD.getCircleProp({coords: COORDS, ...CHILD_PARAM})
 
         mesh.position.set(cx, cy, 0)
@@ -123,7 +123,7 @@ export default class{
         mesh.geometry.dispose()
         mesh.geometry = this.createLineGeometry(radius)
 
-        this.createTween(mesh, idx)
+        this.createTween(mesh)
     }
 
 

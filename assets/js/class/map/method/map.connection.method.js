@@ -14,17 +14,17 @@ export default {
 
         const pp1 = {x: p1.rx * width, y: p1.ry * -height}
         const pp2 = {x: p2.rx * width, y: p2.ry * -height}
-        const pp3 = pp1.y > pp2.y ? pp1 : pp2
 
         const {cx, cy} = this.getCenterPosition(p1, p2, {width, height})
 
         const radius = Math.sqrt((pp1.x - pp2.x) ** 2 + (pp1.y - pp2.y) ** 2) / 2
 
-        const v1 = new THREE.Vector2(pp3.x - cx, pp3.y - cy)
-        const v2 = new THREE.Vector2(pp3.x + cx, 0)
+        const sign = Math.sign(pp1.y - cy)
+        const v1 = new THREE.Vector2(pp1.x - cx, pp1.y - cy)
+        const v2 = new THREE.Vector2(pp1.x + cx, 0)
         const out = v1.x * v2.x + v1.y * v2.y
         const dot = Math.sqrt(v1.x ** 2 + v1.y ** 2) * Math.sqrt(v2.x ** 2 + v2.y ** 2)
-        const theta = Math.acos(out / dot)
+        const theta = Math.acos(out / dot) * sign
     
         return {theta, radius, cx, cy}
     }
