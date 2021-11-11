@@ -8,7 +8,8 @@ export default class{
         this.param = {
             color: 0x32eaff,
             seg: 360,
-            count: 4
+            count: 5,
+            radius: 6
         }
 
         this.deg = 180 / this.param.seg
@@ -22,31 +23,36 @@ export default class{
     init(group){
         this.create(group)
 
-        const children = this.wrapper.children[0].children
+        const lines = this.wrapper.children[0].children[0].children
+        const circles = this.wrapper.children[0].children[1].children
 
-        children.forEach(child => this.createTween(child))
+        lines.forEach((line, i) => this.createLineTween(line, circles[i]))
     }
 
 
     // create
     create(group){
         const positionGroup = new THREE.Group()
+        const lineGroup = new THREE.Group()
+        const circleGroup = new THREE.Group()
         this.wrapper = new THREE.Group()
 
         for(let i = 0; i < this.param.count; i++){
-            const {cx, cy, theta, radius} = METHOD.getCircleProp({coords: COORDS, ...CHILD_PARAM})
-            // console.log(theta)
+            // line
+            const line = this.createLineMesh(1)
+            line.rotation.x = 90 * RADIAN
+            lineGroup.add(line)
 
-            const mesh = this.createLineMesh(radius)
-            mesh.position.set(cx, cy, 0)
-            mesh.rotation.x = 90 * RADIAN
-            mesh.rotation.y = theta
-
-            positionGroup.add(mesh)
+            // circle
+            const circle = this.createCircleMesh()
+            circle.scale.set(0, 0, 0)
+            circleGroup.add(circle)
         }
 
         positionGroup.position.set(CHILD_PARAM.width / -2, CHILD_PARAM.height / 2 + CHILD_PARAM.y, 50)
 
+        positionGroup.add(lineGroup)
+        positionGroup.add(circleGroup)
         this.wrapper.add(positionGroup)
         group.add(this.wrapper)
     }
@@ -83,47 +89,100 @@ export default class{
             depthTest: false
         })
     }
+    // circle
+    createCircleMesh(){
+        const geometry = this.createCircleGeometry()
+        const material = this.createCircleMaterial()
+        return new THREE.Mesh(geometry, material)
+    }
+    createCircleGeometry(){
+        return new THREE.CircleGeometry(this.param.radius, 16)
+    }
+    createCircleMaterial(){
+        return new THREE.MeshBasicMaterial({
+            color: this.param.color,
+            side: THREE.DoubleSide,
+            transparent: true
+        })
+    }
 
 
     // tween
-    createTween(mesh){
+    // line tween
+    createLineTween(line, circle){
+        const circleProp = METHOD.getCircleProp({coords: COORDS, ...CHILD_PARAM})
+
         const start1 = {draw: 0}
         const end1 = {draw: this.param.seg}
 
         const start2 = {draw: this.param.seg}
         const end2 = {draw: 0}
 
-        const tw1 = new TWEEN.Tween(start1)
-        .to(end1, 2000)
-        .delay(Math.random() * 3000)
-        .onUpdate(() => this.updateTween(mesh, start1))
-        .onComplete(() => this.completeTween1(mesh))
+        const dist = circleProp.radius * 2
+        const time = 2000 < dist ? dist : dist + 2000
 
+        // enter
+        const tw1 = new TWEEN.Tween(start1)
+        .to(end1, time)
+        .delay(Math.random() * 3000)
+        .onStart(() => this.beforeLineTween(line, circleProp))
+        .onUpdate(() => this.updateLineTween(line, start1))
+        .onComplete(() => this.completeLineTween1(line, circle, circleProp))
+
+        // leave
         const tw2 = new TWEEN.Tween(start2)
-        .to(end2, 2000)
-        .delay(2000)
-        .onUpdate(() => this.updateTween(mesh, start2))
-        .onComplete(() => this.completeTween2(mesh))
+        .to(end2, time)
+        .delay(Math.random() * 1000 + 1000)
+        .onUpdate(() => this.updateLineTween(line, start2))
+        .onComplete(() => this.completeLineTween2(line, circle))
 
         tw1.chain(tw2)
         tw1.start()
     }
-    updateTween(mesh, {draw}){
-        mesh.geometry.setDrawRange(0, draw)
+    beforeLineTween(line, {cx, cy, theta, radius}){
+        console.log(line)
+        line.position.set(cx, cy, 0)
+        line.rotation.y = theta
+
+        line.geometry.dispose()
+        line.geometry = this.createLineGeometry(radius)
     }
-    completeTween1(mesh){
-        mesh.rotation.y += 180 * RADIAN
+    updateLineTween(line, {draw}){
+        line.geometry.setDrawRange(0, draw)
     }
-    completeTween2(mesh){
-        const {cx, cy, theta, radius} = METHOD.getCircleProp({coords: COORDS, ...CHILD_PARAM})
+    completeLineTween1(line, circle, {dest}){
+        this.createCircleTween1(circle, dest.x, dest.y)
+        line.rotation.y += 180 * RADIAN
+    }
+    completeLineTween2(line, circle){
+        this.createLineTween(line, circle)
+        this.createCircleTween2(circle)
+    }
+    // circle tween
+    createCircleTween1(mesh, x, y){
+        const start = {scale: 0}
+        const end = {scale: 1}
 
-        mesh.position.set(cx, cy, 0)
-        mesh.rotation.y = theta
+        const tw = new TWEEN.Tween(start)
+        .to(end, 200)
+        .onStart(() => this.beforeCircleTween(mesh, x, y))
+        .onUpdate(() => this.updateCircleTween(mesh, start))
+        .start()
+    }
+    createCircleTween2(mesh){
+        const start = {scale: 1}
+        const end = {scale: 0}
 
-        mesh.geometry.dispose()
-        mesh.geometry = this.createLineGeometry(radius)
-
-        this.createTween(mesh)
+        const tw = new TWEEN.Tween(start)
+        .to(end, 200)
+        .onUpdate(() => this.updateCircleTween(mesh, start))
+        .start()
+    }
+    updateCircleTween(mesh, {scale}){
+        mesh.scale.set(scale, scale, 0)
+    }
+    beforeCircleTween(mesh, x, y){
+        mesh.position.set(x, y, 0)
     }
 
 

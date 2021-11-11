@@ -26,6 +26,6 @@ export default {
         const dot = Math.sqrt(v1.x ** 2 + v1.y ** 2) * Math.sqrt(v2.x ** 2 + v2.y ** 2)
         const theta = Math.acos(out / dot) * sign
     
-        return {theta, radius, cx, cy}
+        return {theta, radius, cx, cy, dest: pp2}
     }
 }
