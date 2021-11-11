@@ -8,7 +8,7 @@ export default class{
         this.param = {
             color: 0x32eaff,
             seg: 360,
-            count: 5,
+            count: 8,
             radius: 6
         }
 
@@ -23,11 +23,9 @@ export default class{
     init(group){
         this.create(group)
 
-        const lines = this.wrapper.children[0].children[0].children
-        const circles = this.wrapper.children[0].children[1].children
-        const effects = this.wrapper.children[0].children[2].children
+        const [lines, circles, effects] = this.wrapper.children[0].children
 
-        lines.forEach((line, i) => this.createLineTween(line, circles[i], effects[i]))
+        lines.children.forEach((line, idx) => this.createLineTween({line, circle: circles.children[idx], effect: effects.children[idx], idx}))
     }
 
 
@@ -141,7 +139,7 @@ export default class{
 
     // tween
     // line tween
-    createLineTween(line, circle, effect){
+    createLineTween({line, circle, effect, idx}){
         const circleProp = METHOD.getCircleProp({coords: COORDS, ...CHILD_PARAM})
 
         const start1 = {draw: 0}
@@ -156,22 +154,22 @@ export default class{
         // enter
         const tw1 = new TWEEN.Tween(start1)
         .to(end1, time)
-        .delay(Math.random() * 3000)
-        .onStart(() => this.beforeLineTween(line, circleProp))
+        .delay(Math.random() * (idx * 600))
+        .onStart(() => this.beforeLineTween({line, ...circleProp}))
         .onUpdate(() => this.updateLineTween(line, start1))
-        .onComplete(() => this.completeLineTween1(line, circle, effect, circleProp))
+        .onComplete(() => this.completeLineTween1({line, circle, effect, ...circleProp}))
 
         // leave
         const tw2 = new TWEEN.Tween(start2)
         .to(end2, time)
         .delay(Math.random() * 1000 + 1000)
         .onUpdate(() => this.updateLineTween(line, start2))
-        .onComplete(() => this.completeLineTween2(line, circle, effect))
+        .onComplete(() => this.completeLineTween2({line, circle, effect, idx}))
 
         tw1.chain(tw2)
         tw1.start()
     }
-    beforeLineTween(line, {cx, cy, theta, radius}){
+    beforeLineTween({line, cx, cy, theta, radius}){
         line.position.set(cx, cy, 0)
         line.rotation.y = theta
 
@@ -181,13 +179,13 @@ export default class{
     updateLineTween(line, {draw}){
         line.geometry.setDrawRange(0, draw)
     }
-    completeLineTween1(line, circle, effect, {dest}){
+    completeLineTween1({line, circle, effect, dest}){
         line.rotation.y += 180 * RADIAN
         this.createEffectTween(effect, dest.x, dest.y)
         this.createCircleTween1(circle, dest.x, dest.y)
     }
-    completeLineTween2(line, circle, effect){
-        this.createLineTween(line, circle, effect)
+    completeLineTween2({line, circle, effect, idx}){
+        this.createLineTween({line, circle, effect, idx})
         this.createCircleTween2(circle)
     }
     // circle tween
