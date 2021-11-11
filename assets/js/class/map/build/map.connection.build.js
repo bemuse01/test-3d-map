@@ -183,8 +183,8 @@ export default class{
     }
     completeLineTween1(line, circle, effect, {dest}){
         line.rotation.y += 180 * RADIAN
-        this.createCircleTween1(circle, dest.x, dest.y)
         this.createEffectTween(effect, dest.x, dest.y)
+        this.createCircleTween1(circle, dest.x, dest.y)
     }
     completeLineTween2(line, circle, effect){
         this.createLineTween(line, circle, effect)
@@ -219,7 +219,7 @@ export default class{
     // effect tween
     createEffectTween(mesh, x, y){
         const start = {opacity: 0, scale: 1}
-        const end = {opacity: [0, 0.25, 0.5, 0.25, 0], scale: 3.5}
+        const end = {opacity: [0, 0.25, 0.5, 0.25, 0], scale: 4}
 
         const tw = new TWEEN.Tween(start)
         .to(end, 1200)
