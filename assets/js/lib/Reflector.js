@@ -58,6 +58,7 @@ class Reflector extends Mesh {
 
 		const renderTarget = new WebGLRenderTarget( textureWidth, textureHeight, parameters );
 		// for antialiasing but not work on devices don't support WebGL2
+		// https://discourse.threejs.org/t/poor-resolution-in-reflector/26595
 		// const renderTarget = new WebGLMultisampleRenderTarget( textureWidth, textureHeight, parameters );
 
 		if ( ! MathUtils.isPowerOfTwo( textureWidth ) || ! MathUtils.isPowerOfTwo( textureHeight ) ) {
