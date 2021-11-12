@@ -12,7 +12,8 @@ import {
 	Vector3,
 	Vector4,
 	WebGLRenderTarget,
-	AdditiveBlending
+	AdditiveBlending,
+	WebGLMultisampleRenderTarget
 } from './three.module.js';
 
 class Reflector extends Mesh {
@@ -56,6 +57,8 @@ class Reflector extends Mesh {
 		};
 
 		const renderTarget = new WebGLRenderTarget( textureWidth, textureHeight, parameters );
+		// for antialiasing but not work on devices don't support WebGL2
+		// const renderTarget = new WebGLMultisampleRenderTarget( textureWidth, textureHeight, parameters );
 
 		if ( ! MathUtils.isPowerOfTwo( textureWidth ) || ! MathUtils.isPowerOfTwo( textureHeight ) ) {
 
