@@ -9,7 +9,8 @@ export default class{
             color: 0x32eaff,
             seg: 360,
             count: 8,
-            radius: 6
+            radius: 6,
+            z: 50
         }
 
         this.deg = 180 / this.param.seg
@@ -53,7 +54,7 @@ export default class{
             effectGroup.add(effect)
         }
 
-        positionGroup.position.set(CHILD_PARAM.width / -2, CHILD_PARAM.height / 2 + CHILD_PARAM.y, 50)
+        positionGroup.position.set(CHILD_PARAM.width / -2, CHILD_PARAM.height / 2 + CHILD_PARAM.y, this.param.z)
 
         positionGroup.add(lineGroup)
         positionGroup.add(circleGroup)
