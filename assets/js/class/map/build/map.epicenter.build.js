@@ -6,9 +6,9 @@ export default class{
     constructor({group}){
         this.param = {
             color: 0xff3232,
-            count: 6,
+            count: 8,
             iter: 4,
-            size: 10,
+            size: 6,
             seg: 32,
             z: 50
         }
