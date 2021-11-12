@@ -1,6 +1,6 @@
 import * as THREE from '../../../lib/three.module.js'
-import PUBLIC_METHOD from '../../../method/method.js'
 import PARAM from '../param/map.child.param.js'
+import PUBLIC_METHOD from '../../../method/method.js'
 import COORDS from '../../../data/jp_points.js'
 
 export default class{
@@ -29,14 +29,17 @@ export default class{
 
             const matrix = new THREE.Matrix4()
             
-            const noise = SIMPLEX.noise3D(x * 0.002, y * 0.002, i * 0.01)
-            const scale = PUBLIC_METHOD.normalize(noise, 0.1, 10, -1, 1)
+            // const noise = SIMPLEX.noise3D(x * 0.002, y * 0.002, i * 0.01)
+            // const scale = PUBLIC_METHOD.normalize(noise, 0.1, 10, -1, 1)
+            const noise = SIMPLEX.noise3D(x * 0.01, y * 0.01, i * 0.02)
+            const color = Math.floor(PUBLIC_METHOD.normalize(noise, 0, 60, -1, 1))
 
             matrix.multiply(new THREE.Matrix4().makeTranslation(x, y, 0))
-            matrix.multiply(new THREE.Matrix4().makeScale(1, 1, scale))
-            matrix.multiply(new THREE.Matrix4().makeTranslation(0, 0, PARAM.size / 2))
+            // matrix.multiply(new THREE.Matrix4().makeScale(1, 1, scale))
+            // matrix.multiply(new THREE.Matrix4().makeTranslation(0, 0, PARAM.size / 2))
 
             plane.setMatrixAt(i, matrix)
+            plane.setColorAt(i, new THREE.Color(`hsl(186, 100%, ${color}%)`))
 
             // if(i === 80 || i === 503) plane.setColorAt(i, new THREE.Color(0xffffff))
             
@@ -60,13 +63,13 @@ export default class{
         return new THREE.InstancedMesh(geometry, material, COORDS.coordinates.length)
     }
     createPlaneGeometry(){
-        return new THREE.BoxGeometry(PARAM.size, PARAM.size, PARAM.size)
+        return  new THREE.BoxGeometry(PARAM.size, PARAM.size, PARAM.size)
     }
     createPlaneMaterial(){
         return new THREE.MeshBasicMaterial({
-            color: PARAM.color,
+            // color: PARAM.color,
             transparent: true,
-            opacity: 0.35,
+            opacity: 0.9,
             depthWrite: false,
             depthTest: false,
             blending: THREE.AdditiveBlending

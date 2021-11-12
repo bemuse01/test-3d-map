@@ -53,7 +53,7 @@ export default class{
             effectGroup.add(effect)
         }
 
-        positionGroup.position.set(CHILD_PARAM.width / -2, CHILD_PARAM.height / 2 + CHILD_PARAM.y, 50)
+        positionGroup.position.set(CHILD_PARAM.width / -2, CHILD_PARAM.height / 2 + CHILD_PARAM.y, 20)
 
         positionGroup.add(lineGroup)
         positionGroup.add(circleGroup)
