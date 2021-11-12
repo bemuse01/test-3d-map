@@ -8,7 +8,7 @@ export default class{
             color: 0xff3232,
             count: 8,
             iter: 4,
-            size: 6,
+            size: 8,
             seg: 32,
             z: 50
         }
