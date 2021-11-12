@@ -6,6 +6,8 @@ import MIRROR from './build/map.mirror.build.js'
 import EPICENTER from './build/map.epicenter.build.js'
 import RADAR from './build/map.radar.build.js'
 import CONNECTION from './build/map.connection.build.js'
+import JP from '../../data/jp_points.js'
+import KR from '../../data/kr_points.js'
 
 export default class{
     constructor(){
@@ -26,6 +28,11 @@ export default class{
         this.group = {}
         this.comp = {}
         this.build = new THREE.Group()
+
+        this.map = {
+            jp: JP,
+            kr: KR
+        }
 
         this.init()
     }
