@@ -35,9 +35,11 @@ export default class{
         }
 
         this.play = true
-        this.timer = 1000
+
+        this.timer = 10000
         this.currentTime = window.performance.now()
         this.oldTime = window.performance.now()
+        this.playInterval = true
 
         this.init()
     }
@@ -113,12 +115,22 @@ export default class{
 
 
     // interval
-    interval(){
+    stopTweens(){
+        if(!this.play) return
+
         this.currentTime = window.performance.now()
         if(this.currentTime - this.oldTime > this.timer){
             this.oldTime = this.currentTime
+            this.play = !this.play
             console.log('work')
         }
+    }
+    getFlagAllTweensStop(){
+        // for(const comp in this.comp){
+        //     if(!this.comp[comp].isAllTweenStop) continue
+        //     this.comp[comp].isAllTweenStop()
+        // }
+        // this.play = true 
     }
     
 
@@ -128,7 +140,7 @@ export default class{
         this.render(app)
         this.animateObject()
         this.rotationGroup()
-        // this.interval()
+        // this.stopTweens()
     }
     render(app){
         const rect = this.element.getBoundingClientRect()
