@@ -93,7 +93,7 @@ export default class{
 
             group.rotation.x = PARAM.rotation * RADIAN
 
-            this.comp[module] = new instance({group, size: this.size, camera: this.camera})
+            this.comp[module] = new instance({group, size: this.size, map: this.map})
         }
     }
 

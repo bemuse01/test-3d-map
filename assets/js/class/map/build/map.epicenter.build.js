@@ -1,9 +1,8 @@
 import * as THREE from '../../../lib/three.module.js'
-import COORDS from '../../../data/jp_points.js'
 import CHILD_PARAM from '../param/map.child.param.js'
 
 export default class{
-    constructor({group}){
+    constructor({group, map}){
         this.param = {
             color: 0xff3232,
             count: 8,
@@ -12,6 +11,8 @@ export default class{
             seg: 32,
             z: 50
         }
+
+        this.map = map
 
         this.init(group)
     }
@@ -31,7 +32,7 @@ export default class{
     create(group){
         const positionGroup = new THREE.Group()
         this.wrapper = new THREE.Group()
-        const {coordinates} = COORDS
+        const {coordinates} = this.map.jp
 
         for(let i = 0; i < this.param.count; i++){
             const random = ~~(Math.random() * coordinates.length)
@@ -106,7 +107,7 @@ export default class{
     }
     completeTween(children, isLast, idx){
         if(isLast){
-            const {coordinates} = COORDS
+            const {coordinates} = this.map.jp
             const random = ~~(Math.random() * coordinates.length)
     
             children.forEach(child => {

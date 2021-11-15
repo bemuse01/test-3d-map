@@ -1,10 +1,11 @@
 import * as THREE from '../../../lib/three.module.js'
 import PUBLIC_METHOD from '../../../method/method.js'
 import PARAM from '../param/map.child.param.js'
-import COORDS from '../../../data/jp_points.js'
 
 export default class{
-    constructor({group}){
+    constructor({group, map}){
+        this.map = map
+
         this.init(group)
     }
 
@@ -21,7 +22,7 @@ export default class{
         this.wrapper = new THREE.Group()
         const plane = this.createPlaneMesh()
 
-        COORDS.coordinates.forEach((data, i) => {
+        this.map.jp.coordinates.forEach((data, i) => {
             const {rx, ry} = data
 
             const x = rx * PARAM.width
@@ -30,7 +31,7 @@ export default class{
             const matrix = new THREE.Matrix4()
             
             const noise = SIMPLEX.noise3D(x * 0.002, y * 0.002, i * 0.01)
-            const scale = PUBLIC_METHOD.normalize(noise, 0.1, 10, -1, 1)
+            const scale = PUBLIC_METHOD.normalize(noise, 0.1, 6, -1, 1)
 
             matrix.multiply(new THREE.Matrix4().makeTranslation(x, y, 0))
             matrix.multiply(new THREE.Matrix4().makeScale(1, 1, scale))
@@ -57,7 +58,7 @@ export default class{
     createPlaneMesh(){
         const geometry = this.createPlaneGeometry()
         const material = this.createPlaneMaterial()
-        return new THREE.InstancedMesh(geometry, material, COORDS.coordinates.length)
+        return new THREE.InstancedMesh(geometry, material, this.map.jp.coordinates.length)
     }
     createPlaneGeometry(){
         return new THREE.BoxGeometry(PARAM.size, PARAM.size, PARAM.size)

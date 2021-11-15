@@ -1,10 +1,9 @@
 import * as THREE from '../../../lib/three.module.js'
-import COORDS from '../../../data/jp_points.js'
 import METHOD from '../method/map.connection.method.js'
 import CHILD_PARAM from '../param/map.child.param.js'
 
 export default class{
-    constructor({group}){
+    constructor({group, map}){
         this.param = {
             color: 0x32eaff,
             seg: 360,
@@ -13,6 +12,7 @@ export default class{
             z: 50
         }
 
+        this.map = map
         this.deg = 180 / this.param.seg
         this.draw = 0
 
@@ -141,7 +141,7 @@ export default class{
     // tween
     // line tween
     createLineTween({line, circle, effect, idx}){
-        const circleProp = METHOD.getCircleProp({coords: COORDS, ...CHILD_PARAM})
+        const circleProp = METHOD.getCircleProp({coords: this.map.jp, ...CHILD_PARAM})
 
         const start1 = {draw: 0}
         const end1 = {draw: this.param.seg}
