@@ -27,7 +27,6 @@ export default class{
         const plane = this.createPlaneMesh()
         plane.colors = []
 
-
         this.map.coordinates.forEach((data, i) => {
             const {rx, ry} = data
 

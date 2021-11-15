@@ -2,7 +2,7 @@ import * as THREE from '../../../lib/three.module.js'
 import CHILD_PARAM from '../param/map.child.param.js'
 
 export default class{
-    constructor({group, map}){
+    constructor({group, map, parent}){
         this.param = {
             color: 0xff3232,
             count: 8,
@@ -13,18 +13,19 @@ export default class{
         }
 
         this.map = map
+        this.play = Array.from({length: this.param.count}, () => false)
 
-        this.init(group)
+        this.init(group, parent)
     }
 
 
     // init
-    init(group){
+    init(group, parent){
         this.create(group)
         
         const groups = this.wrapper.children[0].children
         
-        groups.forEach((group, i) => this.createTween(group.children, i))
+        groups.forEach((group, i) => this.createTween(group.children, i, parent))
     }
 
 
@@ -86,7 +87,9 @@ export default class{
 
 
     // tween
-    createTween(children, idx){
+    createTween(children, idx, parent){
+        this.play[idx] = true
+
         children.forEach((child, i) => {
             const start = {opacity: 0, scale: 0.2}
             const end = {opacity: [0, 0.25, 0.5, 1, 0.5, 0], scale: 5}
@@ -95,7 +98,7 @@ export default class{
             .to(end, 1000)
             .onUpdate(() => this.updateTween(child, start))
             .delay(i * 200 + idx * 300)
-            .onComplete(() => this.completeTween(children, i === this.param.iter - 1, idx))
+            .onComplete(() => this.completeTween(children, i === this.param.iter - 1, idx, parent))
             .start()
         })
     }
@@ -105,7 +108,12 @@ export default class{
         child.scale.set(scale, scale, 1)
         child.material.opacity = opacity
     }
-    completeTween(children, isLast, idx){
+    completeTween(children, isLast, idx, parent){
+        if(!parent.play){
+            this.play[idx] = false
+            return
+        }
+
         if(isLast){
             const {coordinates} = this.map
             const random = ~~(Math.random() * coordinates.length)
@@ -119,8 +127,11 @@ export default class{
                 child.position.set(x, y, this.param.z)
             })
 
-            this.createTween(children, idx)
+            this.createTween(children, idx, parent)
         }
+    }
+    isAllTweenStop(){
+        return this.play.every(e => e === false)
     }
 
 

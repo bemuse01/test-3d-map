@@ -34,6 +34,11 @@ export default class{
             kr: KR
         }
 
+        this.play = true
+        this.timer = 1000
+        this.currentTime = window.performance.now()
+        this.oldTime = window.performance.now()
+
         this.init()
     }
 
@@ -44,6 +49,7 @@ export default class{
         this.initRenderObject()
         this.create()
         this.add()
+        // this.execute()
     }
     initGroup(){
         for(const module in this.modules){
@@ -93,9 +99,28 @@ export default class{
 
             group.rotation.x = PARAM.rotation * RADIAN
 
-            this.comp[module] = new instance({group, size: this.size, map: this.map.jp})
+            this.comp[module] = new instance({group, size: this.size, map: this.map.jp, parent: this})
         }
     }
+
+
+    // execute
+    execute(){
+        this.play = !this.play
+        setTimeout(this.execute, 1000)
+    }
+
+
+
+    // interval
+    interval(){
+        this.currentTime = window.performance.now()
+        if(this.currentTime - this.oldTime > this.timer){
+            this.oldTime = this.currentTime
+            console.log('work')
+        }
+    }
+    
 
 
     // animate
@@ -103,6 +128,7 @@ export default class{
         this.render(app)
         this.animateObject()
         this.rotationGroup()
+        // this.interval()
     }
     render(app){
         const rect = this.element.getBoundingClientRect()
