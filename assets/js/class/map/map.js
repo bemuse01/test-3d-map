@@ -41,6 +41,8 @@ export default class{
         this.oldTime = window.performance.now()
         this.playInterval = true
 
+        // this.prx = new Proxy()
+
         this.init()
     }
 
