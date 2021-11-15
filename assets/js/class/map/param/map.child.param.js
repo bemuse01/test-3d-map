@@ -3,5 +3,6 @@ export default {
     height: 1600,
     color: 0x32eaff,
     size: 6,
-    y: 100
+    y: 100,
+    div: 20
 }

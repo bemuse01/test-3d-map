@@ -32,7 +32,7 @@ export default class{
     create(group){
         const positionGroup = new THREE.Group()
         this.wrapper = new THREE.Group()
-        const {coordinates} = this.map.jp
+        const {coordinates} = this.map
 
         for(let i = 0; i < this.param.count; i++){
             const random = ~~(Math.random() * coordinates.length)
@@ -107,7 +107,7 @@ export default class{
     }
     completeTween(children, isLast, idx){
         if(isLast){
-            const {coordinates} = this.map.jp
+            const {coordinates} = this.map
             const random = ~~(Math.random() * coordinates.length)
     
             children.forEach(child => {

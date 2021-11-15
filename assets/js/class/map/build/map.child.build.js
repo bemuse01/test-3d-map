@@ -1,10 +1,13 @@
 import * as THREE from '../../../lib/three.module.js'
 import PUBLIC_METHOD from '../../../method/method.js'
+import METHOD from '../method/map.child.method.js' 
 import PARAM from '../param/map.child.param.js'
 
 export default class{
     constructor({group, map}){
         this.map = map
+
+        this.index = METHOD.createIndex(PARAM.div, this.map.coordinates.length)
 
         this.init(group)
     }
@@ -13,6 +16,7 @@ export default class{
     // init
     init(group){
         this.create(group)
+        this.createOpenTween()
     }
 
 
@@ -21,8 +25,10 @@ export default class{
         const positionGroup = new THREE.Group()
         this.wrapper = new THREE.Group()
         const plane = this.createPlaneMesh()
+        plane.colors = []
 
-        this.map.jp.coordinates.forEach((data, i) => {
+
+        this.map.coordinates.forEach((data, i) => {
             const {rx, ry} = data
 
             const x = rx * PARAM.width
@@ -30,14 +36,19 @@ export default class{
 
             const matrix = new THREE.Matrix4()
             
-            const noise = SIMPLEX.noise3D(x * 0.002, y * 0.002, i * 0.01)
-            const scale = PUBLIC_METHOD.normalize(noise, 0.1, 6, -1, 1)
+            const noise1 = SIMPLEX.noise3D(x * 0.002, y * 0.002, i * 0.01)
+            const scale = PUBLIC_METHOD.normalize(noise1, 0.1, 6, -1, 1)
 
+            const noise2 = SIMPLEX.noise3D(x * 0.01, y * 0.01, i * 0.02)
+            const color = Math.floor(PUBLIC_METHOD.normalize(noise2, 0, 45, -1, 1))
+            
             matrix.multiply(new THREE.Matrix4().makeTranslation(x, y, 0))
             matrix.multiply(new THREE.Matrix4().makeScale(1, 1, scale))
             matrix.multiply(new THREE.Matrix4().makeTranslation(0, 0, PARAM.size / 2))
 
             plane.setMatrixAt(i, matrix)
+            plane.setColorAt(i, new THREE.Color(`hsl(186, 100%, 0%)`))
+            plane.colors.push(color)
 
             // if(i === 80 || i === 503) plane.setColorAt(i, new THREE.Color(0xffffff))
             
@@ -58,16 +69,16 @@ export default class{
     createPlaneMesh(){
         const geometry = this.createPlaneGeometry()
         const material = this.createPlaneMaterial()
-        return new THREE.InstancedMesh(geometry, material, this.map.jp.coordinates.length)
+        return new THREE.InstancedMesh(geometry, material, this.map.coordinates.length)
     }
     createPlaneGeometry(){
         return new THREE.BoxGeometry(PARAM.size, PARAM.size, PARAM.size)
     }
     createPlaneMaterial(){
         return new THREE.MeshBasicMaterial({
-            color: PARAM.color,
+            // color: PARAM.color,
             transparent: true,
-            opacity: 0.35,
+            opacity: 1.0,
             depthWrite: false,
             depthTest: false,
             blending: THREE.AdditiveBlending
@@ -90,6 +101,30 @@ export default class{
             depthTest: false,
             opacity: 0.5
         })
+    }
+    
+
+    // tween
+    // open
+    createOpenTween(){
+        const plane = this.wrapper.children[0].children[0]
+
+        this.index.forEach((indices, i) => {
+            const start = {light: 0}
+            const end = {light: [1, 0, 1, 0, 1]}
+            
+            const tw = new TWEEN.Tween(start)
+            .to(end, 200)
+            .onUpdate(() => this.updateOpenTween(plane, indices, start))
+            .delay(20 * i)
+            .start()
+        })
+    }
+    updateOpenTween(plane, indices, {light}){
+        indices.forEach(i => {
+            plane.setColorAt(i, new THREE.Color(`hsl(186, 100%, ${~~(plane.colors[i] * light)}%)`))
+        })
+        plane.instanceColor.needsUpdate = true
     }
 
 

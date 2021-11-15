@@ -141,7 +141,7 @@ export default class{
     // tween
     // line tween
     createLineTween({line, circle, effect, idx}){
-        const circleProp = METHOD.getCircleProp({coords: this.map.jp, ...CHILD_PARAM})
+        const circleProp = METHOD.getCircleProp({coords: this.map, ...CHILD_PARAM})
 
         const start1 = {draw: 0}
         const end1 = {draw: this.param.seg}
