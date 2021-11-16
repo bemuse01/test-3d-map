@@ -158,5 +158,8 @@ export default class{
     }
 
 
-    // animate
+    // set
+    setMap(map){
+        this.map = map
+    }
 }

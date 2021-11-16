@@ -253,5 +253,9 @@ export default class{
         return this.play.every(e => e === false)
     }
 
-    // animate
+
+    // set
+    setMap(map){
+        this.map = map
+    }
 }

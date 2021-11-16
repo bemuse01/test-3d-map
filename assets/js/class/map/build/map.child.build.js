@@ -4,11 +4,12 @@ import METHOD from '../method/map.child.method.js'
 import PARAM from '../param/map.child.param.js'
 
 export default class{
-    constructor({group, map, proxy}){
+    constructor({group, map, parent, proxy}){
         this.map = map
 
         this.index = METHOD.createIndex(PARAM.div, this.map.coordinates.length)
 
+        this.parent = parent
         this.parentProxy = proxy
 
         this.init(group)
@@ -17,23 +18,22 @@ export default class{
 
     // init
     init(group){
-        // this.initProxy()
         this.create(group)
         this.createOpenTween()
     }
-    initProxy(){
-        const self = this
-        const target = {done: false}
-        
-        this.proxy = new Proxy(target, {
-            set(obj, prop, value){
-                obj[prop] = value
 
-                if(obj['done'] === true) self.parentProxy.child = true
 
-                return true
-            }
-        })
+    // open
+    open(group){
+        this.index = METHOD.createIndex(PARAM.div, this.map.coordinates.length)
+
+        this.init(group)
+    }
+
+
+    // close
+    close(group){
+        this.createCloseTween(group)
     }
 
 
@@ -42,6 +42,35 @@ export default class{
         const positionGroup = new THREE.Group()
         this.wrapper = new THREE.Group()
         const plane = this.createPlaneMesh()
+
+        this.setMeshProps(plane)
+        
+        positionGroup.position.set(PARAM.width / -2, PARAM.height / 2 + PARAM.y, 0)
+
+        positionGroup.add(plane)
+        this.wrapper.add(positionGroup)
+        group.add(this.wrapper)
+    }
+    // plane
+    createPlaneMesh(){
+        const geometry = this.createPlaneGeometry()
+        const material = this.createPlaneMaterial()
+        return new THREE.InstancedMesh(geometry, material, this.map.coordinates.length)
+    }
+    createPlaneGeometry(){
+        return new THREE.BoxGeometry(PARAM.size, PARAM.size, PARAM.size)
+    }
+    createPlaneMaterial(){
+        return new THREE.MeshBasicMaterial({
+            // color: PARAM.color,
+            transparent: true,
+            opacity: 1.0,
+            depthWrite: false,
+            depthTest: false,
+            blending: THREE.AdditiveBlending
+        })
+    }
+    setMeshProps(plane){
         plane.colors = []
 
         this.map.coordinates.forEach((data, i) => {
@@ -75,30 +104,8 @@ export default class{
             // positionGroup.add(planeEdge)
         })
 
-        positionGroup.position.set(PARAM.width / -2, PARAM.height / 2 + PARAM.y, 0)
-
-        positionGroup.add(plane)
-        this.wrapper.add(positionGroup)
-        group.add(this.wrapper)
-    }
-    // plane
-    createPlaneMesh(){
-        const geometry = this.createPlaneGeometry()
-        const material = this.createPlaneMaterial()
-        return new THREE.InstancedMesh(geometry, material, this.map.coordinates.length)
-    }
-    createPlaneGeometry(){
-        return new THREE.BoxGeometry(PARAM.size, PARAM.size, PARAM.size)
-    }
-    createPlaneMaterial(){
-        return new THREE.MeshBasicMaterial({
-            // color: PARAM.color,
-            transparent: true,
-            opacity: 1.0,
-            depthWrite: false,
-            depthTest: false,
-            blending: THREE.AdditiveBlending
-        })
+        plane.instanceColor.needsUpdate = true
+        plane.instanceMatrix.needsUpdate = true
     }
     // plane edge
     createEdgeMesh(geo){
@@ -121,7 +128,7 @@ export default class{
     
 
     // tween
-    // open
+    // open tween
     createOpenTween(){
         const plane = this.wrapper.children[0].children[0]
 
@@ -131,13 +138,13 @@ export default class{
             
             const tw = new TWEEN.Tween(start)
             .to(end, 200)
-            .onUpdate(() => this.updateOpenTween(plane, indices, start))
+            .onUpdate(() => this.updateTween(plane, indices, start))
             .onComplete(() => this.completeOpenTween(i === this.index.length - 1))
             .delay(20 * i)
             .start()
         })
     }
-    updateOpenTween(plane, indices, {light}){
+    updateTween(plane, indices, {light}){
         indices.forEach(i => {
             plane.setColorAt(i, new THREE.Color(`hsl(186, 100%, ${~~(plane.colors[i] * light)}%)`))
         })
@@ -148,7 +155,49 @@ export default class{
             this.parentProxy.child = true
         }
     }
+    // close tween
+    createCloseTween(group){
+        const plane = this.wrapper.children[0].children[0]
+
+        this.index.forEach((indices, i) => {
+            const start = {light: 0}
+            const end = {light: [0, 1, 0]}
+            
+            const tw = new TWEEN.Tween(start)
+            .to(end, 100)
+            .onUpdate(() => this.updateTween(plane, indices, start))
+            .onComplete(() => this.completeCloseTween(group, i === this.index.length - 1))
+            .delay(20 * i)
+            .start()
+        })
+    }
+    completeCloseTween(group, isLast){
+        if(isLast){
+            this.dispose(group)
+            this.parent.setProxyToFalse()
+            this.open(group)
+        }
+    }
 
 
-    // animate
+    // dispose
+    dispose(group){
+        const plane = this.wrapper.children[0].children[0]
+        plane.geometry.dispose()
+        plane.material.dispose()
+
+        const positionGroup = this.wrapper.children[0]
+        positionGroup.clear()
+
+        this.wrapper.clear()
+        this.wrapper = null
+
+        group.clear()
+    }
+
+
+    // set
+    setMap(map){
+        this.map = map
+    }
 }

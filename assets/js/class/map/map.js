@@ -33,10 +33,11 @@ export default class{
             jp: JP,
             kr: KR
         }
+        this.mapIndex = 0
 
         this.play = true
 
-        this.timer = 5000
+        this.timer = 10000
         this.currentTime = window.performance.now()
         this.oldTime = window.performance.now()
         this.playInterval = true
@@ -97,7 +98,7 @@ export default class{
                 const arr = []
 
                 for(const prop in obj){
-                    if(prop === 'child') continue
+                    // if(prop === 'child') continue
                     arr.push(obj[prop])
                 }
 
@@ -106,15 +107,16 @@ export default class{
             set(obj, prop, value){
                 obj[prop] = value
 
-                // if(this.isAllTrue(obj)) console.log('all true')
-                // else console.log('not all true')
-
-                // console.log(prop)
-
+                // 
                 if(prop === 'child' && obj['child'] === true){
                     self.play = true
                     self.executeEffect()
-                    console.log('work')
+                }
+
+                // 
+                if(this.isAllTrue(obj)){
+                    self.setMap()
+                    self.comp['child'].close(self.group['child'])
                 }
                 
                 return true
@@ -146,7 +148,7 @@ export default class{
 
     // interval
     intervalStopTween(){
-        if(this.play === false){
+        if(!this.play){
             this.oldTime = window.performance.now()
             return
         }
@@ -155,7 +157,6 @@ export default class{
         if(this.currentTime - this.oldTime > this.timer){
             this.oldTime = this.currentTime
             this.play = false
-            console.log(this.play)
         }
     }
 
@@ -164,6 +165,23 @@ export default class{
     executeEffect(){
         this.comp.epicenter.initTween()
         this.comp.connection.initTween()
+    }
+
+
+    // set
+    setMap(){
+        const keys = Object.keys(this.map)
+        this.mapIndex = (this.mapIndex + 1) % keys.length
+
+        for(const comp in this.comp){
+            if(!this.comp[comp].setMap) continue
+            this.comp[comp].setMap(this.map[keys[this.mapIndex]])
+        }
+    }
+    setProxyToFalse(){
+        this.proxy['child'] = false
+        this.proxy['epicenter'] = false
+        this.proxy['connection'] = false
     }
 
 
