@@ -7,7 +7,7 @@ export default class{
     constructor({group, map, parent, proxy}){
         this.map = map
 
-        this.index = METHOD.createIndex(PARAM.div, this.map.coordinates.length)
+        this.index = METHOD.createIndex(~~(this.map.coordinates.length * PARAM.div), this.map.coordinates.length)
 
         this.parent = parent
         this.parentProxy = proxy
@@ -25,7 +25,7 @@ export default class{
 
     // open
     open(group){
-        this.index = METHOD.createIndex(PARAM.div, this.map.coordinates.length)
+        this.index = METHOD.createIndex(~~(this.map.coordinates.length * PARAM.div), this.map.coordinates.length)
 
         this.init(group)
     }

@@ -8,6 +8,7 @@ import RADAR from './build/map.radar.build.js'
 import CONNECTION from './build/map.connection.build.js'
 import JP from '../../data/jp_points.js'
 import KR from '../../data/kr_points.js'
+import US from '../../data/us_points.js'
 
 export default class{
     constructor(){
@@ -31,7 +32,8 @@ export default class{
 
         this.map = {
             jp: JP,
-            kr: KR
+            kr: KR,
+            us: US
         }
         this.mapIndex = 0
 

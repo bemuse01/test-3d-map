@@ -4,5 +4,5 @@ export default {
     color: 0x32eaff,
     size: 6,
     y: 100,
-    div: 20
+    div: 0.04
 }
