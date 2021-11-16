@@ -36,7 +36,7 @@ export default class{
 
         this.play = true
 
-        this.timer = 1000
+        this.timer = 5000
         this.currentTime = window.performance.now()
         this.oldTime = window.performance.now()
         this.playInterval = true
@@ -109,7 +109,13 @@ export default class{
                 // if(this.isAllTrue(obj)) console.log('all true')
                 // else console.log('not all true')
 
-                if(obj['child'] === true) self.executeEffect()
+                // console.log(prop)
+
+                if(prop === 'child' && obj['child'] === true){
+                    self.play = true
+                    self.executeEffect()
+                    console.log('work')
+                }
                 
                 return true
             }
@@ -139,8 +145,8 @@ export default class{
 
 
     // interval
-    stopTweens(){
-        if(!this.play){
+    intervalStopTween(){
+        if(this.play === false){
             this.oldTime = window.performance.now()
             return
         }
@@ -149,7 +155,7 @@ export default class{
         if(this.currentTime - this.oldTime > this.timer){
             this.oldTime = this.currentTime
             this.play = false
-            console.log('work')
+            console.log(this.play)
         }
     }
 
@@ -166,7 +172,7 @@ export default class{
         this.render(app)
         this.animateObject()
         this.rotationGroup()
-        // this.stopTweens()
+        this.intervalStopTween()
     }
     render(app){
         const rect = this.element.getBoundingClientRect()

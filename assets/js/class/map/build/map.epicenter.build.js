@@ -13,6 +13,9 @@ export default class{
         }
 
         this.map = map
+
+        this.play = Array.from({length: this.param.count}, () => true)
+        
         this.parent = parent
         this.parentProxy = proxy
 
@@ -22,12 +25,11 @@ export default class{
 
     // init
     init(group){
-        this.initProxy()
+        // this.initProxy()
         this.create(group)
     }
     initProxy(){
-        const self = this
-        this.play = Array.from({length: this.param.count}, () => true)
+        // const self = this
 
         // this.proxy = new Proxy(play, {
         //     isAllStop(arr){
@@ -108,6 +110,8 @@ export default class{
         groups.forEach((group, i) => this.createTween(group.children, i))
     }
     createTween(children, idx){
+        this.play[idx] = true
+
         children.forEach((child, i) => {
             const start = {opacity: 0, scale: 0.2}
             const end = {opacity: [0, 0.25, 0.5, 1, 0.5, 0], scale: 5}
@@ -128,11 +132,11 @@ export default class{
     }
     completeTween(children, isLast, idx){
         if(isLast){
-            // if(!this.parent.play){
-            //     this.play[idx] = false
-            //     if(this.isAllTweenStop()) this.parentProxy.epicenter = true
-            //     return
-            // }
+            if(!this.parent.play){
+                this.play[idx] = false
+                if(this.isAllTweenStop()) this.parentProxy.epicenter = true
+                return
+            }
 
             const {coordinates} = this.map
             const random = ~~(Math.random() * coordinates.length)

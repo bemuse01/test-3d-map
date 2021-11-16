@@ -3,7 +3,7 @@ import METHOD from '../method/map.connection.method.js'
 import CHILD_PARAM from '../param/map.child.param.js'
 
 export default class{
-    constructor({group, map}){
+    constructor({group, map, parent, proxy}){
         this.param = {
             color: 0x32eaff,
             seg: 360,
@@ -15,6 +15,11 @@ export default class{
         this.map = map
         this.deg = 180 / this.param.seg
         this.draw = 0
+
+        this.play = Array.from({length: this.param.count}, () => true)
+
+        this.parent = parent
+        this.parentProxy = proxy
 
         this.init(group)
     }
@@ -142,6 +147,8 @@ export default class{
     }
     // line tween
     createLineTween({line, circle, effect, idx}){
+        this.play[idx] = true
+
         const circleProp = METHOD.getCircleProp({coords: this.map, ...CHILD_PARAM})
 
         const start1 = {draw: 0}
@@ -187,8 +194,15 @@ export default class{
         this.createCircleTween1(circle, dest.x, dest.y)
     }
     completeLineTween2({line, circle, effect, idx}){
-        this.createLineTween({line, circle, effect, idx})
         this.createCircleTween2(circle)
+
+        if(!this.parent.play){
+            this.play[idx] = false
+            if(this.isAllTweenStop()) this.parentProxy.connection = true
+            return
+        }
+
+        this.createLineTween({line, circle, effect, idx})
     }
     // circle tween
     createCircleTween1(mesh, x, y){
@@ -235,7 +249,9 @@ export default class{
         mesh.scale.set(scale, scale, 1)
         mesh.material.opacity = opacity
     }
-
+    isAllTweenStop(){
+        return this.play.every(e => e === false)
+    }
 
     // animate
 }

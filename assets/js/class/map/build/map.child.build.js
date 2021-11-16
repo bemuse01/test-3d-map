@@ -144,7 +144,9 @@ export default class{
         plane.instanceColor.needsUpdate = true
     }
     completeOpenTween(isLast){
-        if(isLast) this.parentProxy.child = true
+        if(isLast){
+            this.parentProxy.child = true
+        }
     }
 
 
