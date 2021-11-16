@@ -23,10 +23,6 @@ export default class{
     // init
     init(group){
         this.create(group)
-
-        const [lines, circles, effects] = this.wrapper.children[0].children
-
-        lines.children.forEach((line, idx) => this.createLineTween({line, circle: circles.children[idx], effect: effects.children[idx], idx}))
     }
 
 
@@ -139,6 +135,11 @@ export default class{
 
 
     // tween
+    initTween(){
+        const [lines, circles, effects] = this.wrapper.children[0].children
+
+        lines.children.forEach((line, idx) => this.createLineTween({line, circle: circles.children[idx], effect: effects.children[idx], idx}))
+    }
     // line tween
     createLineTween({line, circle, effect, idx}){
         const circleProp = METHOD.getCircleProp({coords: this.map, ...CHILD_PARAM})

@@ -2,7 +2,7 @@ import * as THREE from '../../../lib/three.module.js'
 import CHILD_PARAM from '../param/map.child.param.js'
 
 export default class{
-    constructor({group, map, parent}){
+    constructor({group, map, parent, proxy}){
         this.param = {
             color: 0xff3232,
             count: 8,
@@ -13,19 +13,36 @@ export default class{
         }
 
         this.map = map
-        this.play = Array.from({length: this.param.count}, () => false)
+        this.parent = parent
+        this.parentProxy = proxy
 
-        this.init(group, parent)
+        console.log(proxy)
+
+        this.init(group)
     }
 
 
     // init
-    init(group, parent){
+    init(group){
+        this.initProxy()
         this.create(group)
-        
-        const groups = this.wrapper.children[0].children
-        
-        groups.forEach((group, i) => this.createTween(group.children, i, parent))
+    }
+    initProxy(){
+        const self = this
+        this.play = Array.from({length: this.param.count}, () => true)
+
+        // this.proxy = new Proxy(play, {
+        //     isAllStop(arr){
+        //         return arr.every(e => e === false)
+        //     },
+        //     set(arr, idx, value){
+        //         arr[idx] = value
+
+        //         if(this.isAllStop(arr)) self.parentProxy.epicenter = true
+
+        //         return true
+        //     }
+        // })
     }
 
 
@@ -87,9 +104,12 @@ export default class{
 
 
     // tween
-    createTween(children, idx, parent){
-        this.play[idx] = true
-
+    initTween(){
+        const groups = this.wrapper.children[0].children
+        
+        groups.forEach((group, i) => this.createTween(group.children, i))
+    }
+    createTween(children, idx){
         children.forEach((child, i) => {
             const start = {opacity: 0, scale: 0.2}
             const end = {opacity: [0, 0.25, 0.5, 1, 0.5, 0], scale: 5}
@@ -98,7 +118,7 @@ export default class{
             .to(end, 1000)
             .onUpdate(() => this.updateTween(child, start))
             .delay(i * 200 + idx * 300)
-            .onComplete(() => this.completeTween(children, i === this.param.iter - 1, idx, parent))
+            .onComplete(() => this.completeTween(children, i === this.param.iter - 1, idx))
             .start()
         })
     }
@@ -108,13 +128,14 @@ export default class{
         child.scale.set(scale, scale, 1)
         child.material.opacity = opacity
     }
-    completeTween(children, isLast, idx, parent){
-        if(!parent.play){
-            this.play[idx] = false
-            return
-        }
-
+    completeTween(children, isLast, idx){
         if(isLast){
+            // if(!this.parent.play){
+            //     this.play[idx] = false
+            //     if(this.isAllTweenStop()) this.parentProxy.epicenter = true
+            //     return
+            // }
+
             const {coordinates} = this.map
             const random = ~~(Math.random() * coordinates.length)
     
@@ -127,7 +148,7 @@ export default class{
                 child.position.set(x, y, this.param.z)
             })
 
-            this.createTween(children, idx, parent)
+            this.createTween(children, idx)
         }
     }
     isAllTweenStop(){

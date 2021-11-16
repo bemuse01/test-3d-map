@@ -4,10 +4,12 @@ import METHOD from '../method/map.child.method.js'
 import PARAM from '../param/map.child.param.js'
 
 export default class{
-    constructor({group, map}){
+    constructor({group, map, proxy}){
         this.map = map
 
         this.index = METHOD.createIndex(PARAM.div, this.map.coordinates.length)
+
+        this.parentProxy = proxy
 
         this.init(group)
     }
@@ -15,8 +17,23 @@ export default class{
 
     // init
     init(group){
+        // this.initProxy()
         this.create(group)
         this.createOpenTween()
+    }
+    initProxy(){
+        const self = this
+        const target = {done: false}
+        
+        this.proxy = new Proxy(target, {
+            set(obj, prop, value){
+                obj[prop] = value
+
+                if(obj['done'] === true) self.parentProxy.child = true
+
+                return true
+            }
+        })
     }
 
 
@@ -115,6 +132,7 @@ export default class{
             const tw = new TWEEN.Tween(start)
             .to(end, 200)
             .onUpdate(() => this.updateOpenTween(plane, indices, start))
+            .onComplete(() => this.completeOpenTween(i === this.index.length - 1))
             .delay(20 * i)
             .start()
         })
@@ -124,6 +142,9 @@ export default class{
             plane.setColorAt(i, new THREE.Color(`hsl(186, 100%, ${~~(plane.colors[i] * light)}%)`))
         })
         plane.instanceColor.needsUpdate = true
+    }
+    completeOpenTween(isLast){
+        if(isLast) this.parentProxy.child = true
     }
 
 

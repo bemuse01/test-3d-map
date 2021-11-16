@@ -19,7 +19,7 @@ export default class{
         }
 
         this.modules = {
-            MIRROR: MIRROR,
+            mirror: MIRROR,
             child: CHILD,
             epicenter: EPICENTER,
             radar: RADAR,
@@ -36,12 +36,10 @@ export default class{
 
         this.play = true
 
-        this.timer = 10000
+        this.timer = 1000
         this.currentTime = window.performance.now()
         this.oldTime = window.performance.now()
         this.playInterval = true
-
-        // this.prx = new Proxy()
 
         this.init()
     }
@@ -51,9 +49,9 @@ export default class{
     init(){
         this.initGroup()
         this.initRenderObject()
+        this.initProxy()
         this.create()
         this.add()
-        // this.execute()
     }
     initGroup(){
         for(const module in this.modules){
@@ -85,6 +83,38 @@ export default class{
             }
         }
     }
+    initProxy(){
+        const self = this
+        
+        const isTweenPlay = {
+            child: false,
+            epicenter: false,
+            connection: false
+        }
+
+        this.proxy = new Proxy(isTweenPlay, {
+            isAllTrue(obj){
+                const arr = []
+
+                for(const prop in obj){
+                    if(prop === 'child') continue
+                    arr.push(obj[prop])
+                }
+
+                return arr.every(e => e === true)
+            },
+            set(obj, prop, value){
+                obj[prop] = value
+
+                // if(this.isAllTrue(obj)) console.log('all true')
+                // else console.log('not all true')
+
+                if(obj['child'] === true) self.executeEffect()
+                
+                return true
+            }
+        })
+    }
 
 
     // add
@@ -103,38 +133,32 @@ export default class{
 
             group.rotation.x = PARAM.rotation * RADIAN
 
-            this.comp[module] = new instance({group, size: this.size, map: this.map.jp, parent: this})
+            this.comp[module] = new instance({group, size: this.size, map: this.map.jp, parent: this, proxy: this.proxy})
+        }
+    }
+
+
+    // interval
+    stopTweens(){
+        if(!this.play){
+            this.oldTime = window.performance.now()
+            return
+        }
+
+        this.currentTime = window.performance.now()
+        if(this.currentTime - this.oldTime > this.timer){
+            this.oldTime = this.currentTime
+            this.play = false
+            console.log('work')
         }
     }
 
 
     // execute
-    execute(){
-        this.play = !this.play
-        setTimeout(this.execute, 1000)
+    executeEffect(){
+        this.comp.epicenter.initTween()
+        this.comp.connection.initTween()
     }
-
-
-
-    // interval
-    stopTweens(){
-        if(!this.play) return
-
-        this.currentTime = window.performance.now()
-        if(this.currentTime - this.oldTime > this.timer){
-            this.oldTime = this.currentTime
-            this.play = !this.play
-            console.log('work')
-        }
-    }
-    getFlagAllTweensStop(){
-        // for(const comp in this.comp){
-        //     if(!this.comp[comp].isAllTweenStop) continue
-        //     this.comp[comp].isAllTweenStop()
-        // }
-        // this.play = true 
-    }
-    
 
 
     // animate
