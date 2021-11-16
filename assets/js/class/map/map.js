@@ -95,14 +95,7 @@ export default class{
 
         this.proxy = new Proxy(isTweenPlay, {
             isAllTrue(obj){
-                const arr = []
-
-                for(const prop in obj){
-                    // if(prop === 'child') continue
-                    arr.push(obj[prop])
-                }
-
-                return arr.every(e => e === true)
+                return Object.keys(obj).every(key => obj[key] === true)
             },
             set(obj, prop, value){
                 obj[prop] = value
@@ -115,8 +108,10 @@ export default class{
 
                 // 
                 if(this.isAllTrue(obj)){
+                    self.setProxyToFalse()
                     self.setMap()
                     self.comp['child'].close(self.group['child'])
+                    console.log('work')
                 }
                 
                 return true
@@ -179,9 +174,7 @@ export default class{
         }
     }
     setProxyToFalse(){
-        this.proxy['child'] = false
-        this.proxy['epicenter'] = false
-        this.proxy['connection'] = false
+        for(const proxy in this.proxy) this.proxy[proxy] = false
     }
 
 

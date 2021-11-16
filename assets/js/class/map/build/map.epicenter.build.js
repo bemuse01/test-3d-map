@@ -25,24 +25,7 @@ export default class{
 
     // init
     init(group){
-        // this.initProxy()
         this.create(group)
-    }
-    initProxy(){
-        // const self = this
-
-        // this.proxy = new Proxy(play, {
-        //     isAllStop(arr){
-        //         return arr.every(e => e === false)
-        //     },
-        //     set(arr, idx, value){
-        //         arr[idx] = value
-
-        //         if(this.isAllStop(arr)) self.parentProxy.epicenter = true
-
-        //         return true
-        //     }
-        // })
     }
 
 

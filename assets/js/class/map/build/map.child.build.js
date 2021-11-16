@@ -174,7 +174,7 @@ export default class{
     completeCloseTween(group, isLast){
         if(isLast){
             this.dispose(group)
-            this.parent.setProxyToFalse()
+            // this.parent.setProxyToFalse()
             this.open(group)
         }
     }
