@@ -9,7 +9,8 @@ export default class{
             seg: 360,
             count: 8,
             radius: 6,
-            z: 50
+            z: 50,
+            lineTime: 1600,
         }
 
         this.map = map
@@ -158,7 +159,7 @@ export default class{
         const end2 = {draw: 0}
 
         const dist = circleProp.radius * 2
-        const time = 2000 < dist ? dist : dist + 2000
+        const time = this.param.lineTime < dist ? dist : dist + this.param.lineTime
 
         // enter
         const tw1 = new TWEEN.Tween(start1)
