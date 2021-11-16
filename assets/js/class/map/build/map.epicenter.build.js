@@ -16,8 +16,6 @@ export default class{
         this.parent = parent
         this.parentProxy = proxy
 
-        console.log(proxy)
-
         this.init(group)
     }
 
