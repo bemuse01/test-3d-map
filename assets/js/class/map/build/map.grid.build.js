@@ -1,12 +1,13 @@
 import * as THREE from '../../../lib/three.module.js'
+import CHILD_PARAM from '../param/map.child.param.js'
 
 export default class{
     constructor({group}){
         this.param = {
             color: 0x32eaff,
-            width: 1000,
-            height: 1000,
-            seg: 32 - 1
+            width: 1400,
+            height: 1400,
+            seg: 10 - 1
         }
 
         this.init(group)
@@ -24,18 +25,19 @@ export default class{
         const positionGroup = new THREE.Group()
         this.wrapper = new THREE.Group()
 
-        const plane = new THREE.PlaneGeometry(this.param.width, this.param.height, this.param.seg, this.param.seg)
-        
+        const offset = this.param.width / -2
+        const gap = this.param.width / this.param.seg
 
-        console.log(plane)
+        for(let i = 0; i < this.param.seg + 1; i++){
+            const x = offset + gap * i
+            const y = 0
 
-        // for(let i = 0; i < this.param.seg; i++){
-        //     const mesh = this.createMesh()
+            const mesh = this.createMesh([0, -offset, 0, 0, offset, 0])
 
+            mesh.position.set(x, y, 0)
 
-
-        //     positionGroup.add(mesh)
-        // }
+            positionGroup.add(mesh)
+        }
 
         // for(let i = 0; i < plane.length / 3; i++){
         //     const mesh = this.createMesh()
@@ -44,21 +46,20 @@ export default class{
 
         // }
                 
-        // positionGroup.position.set(0, PARAM.y, 0)
+        positionGroup.position.set(0, CHILD_PARAM.y, 0)
 
-        // positionGroup.add(plane)
-        // this.wrapper.add(positionGroup)
-        // group.add(this.wrapper)
+        this.wrapper.add(positionGroup)
+        group.add(this.wrapper)
     }
-    createMesh(){
-        const geometry = this.createGeometry()
+    createMesh(position){
+        const geometry = this.createGeometry(position)
         const material = this.createMaterial()
         return new THREE.Line(geometry, material)
     }
     createGeometry(position){
         const geometry = new THREE.BufferGeometry()
         
-        geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(position, 3)))
+        geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(position), 3))
 
         return geometry
     }
