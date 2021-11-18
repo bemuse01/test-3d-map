@@ -6,6 +6,7 @@ import MIRROR from './build/map.mirror.build.js'
 import EPICENTER from './build/map.epicenter.build.js'
 import RADAR from './build/map.radar.build.js'
 import CONNECTION from './build/map.connection.build.js'
+import GRID from './build/map.grid.build.js'
 import JP from '../../data/jp_points.js'
 import KR from '../../data/kr_points.js'
 import US from '../../data/us_points.js'
@@ -24,7 +25,8 @@ export default class{
             child: CHILD,
             epicenter: EPICENTER,
             radar: RADAR,
-            connection: CONNECTION
+            connection: CONNECTION,
+            grid: GRID
         }
         this.group = {}
         this.comp = {}
@@ -102,18 +104,17 @@ export default class{
             set(obj, prop, value){
                 obj[prop] = value
 
-                // 
+                // start tweens after child tween done
                 if(prop === 'child' && obj['child'] === true){
                     self.play = true
                     self.executeEffect()
                 }
 
-                // 
+                // disappear current map and display new map
                 if(this.isAllTrue(obj)){
                     self.setProxyToFalse()
                     self.setMap()
                     self.comp['child'].close(self.group['child'])
-                    console.log('work')
                 }
                 
                 return true
