@@ -95,7 +95,8 @@ export default class{
             transparent: true,
             depthWrite: false,
             depthTest: false,
-            // opacity: 0.9
+            blending: THREE.AdditiveBlending,
+            opacity: 1.0
         })
     }
     // circle
@@ -111,7 +112,11 @@ export default class{
         return new THREE.MeshBasicMaterial({
             color: this.param.color,
             side: THREE.DoubleSide,
-            transparent: true
+            transparent: true,
+            depthWrite: false,
+            depthTest: false,
+            // blending: THREE.AdditiveBlending,
+            opacity: 1.0
         })
     }
     // effect
