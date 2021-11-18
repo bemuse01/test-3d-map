@@ -1,13 +1,14 @@
 import * as THREE from '../../../lib/three.module.js'
 import CHILD_PARAM from '../param/map.child.param.js'
+import SHADER from '../shader/map.grid.shader.js'
 
 export default class{
     constructor({group}){
         this.param = {
             color: 0x32eaff,
-            width: 1400,
-            height: 1400,
-            seg: 10 - 1
+            width: 1600,
+            height: 1600,
+            seg: 16 - 1
         }
 
         this.init(group)
@@ -30,21 +31,25 @@ export default class{
 
         for(let i = 0; i < this.param.seg + 1; i++){
             const x = offset + gap * i
-            const y = 0
+            // const y = 0
 
-            const mesh = this.createMesh([0, -offset, 0, 0, offset, 0])
+            const mesh = this.createMesh([x, -offset, 0, x, offset, 0])
 
-            mesh.position.set(x, y, 0)
+            // mesh.position.set(x, y, 0)
 
             positionGroup.add(mesh)
         }
 
-        // for(let i = 0; i < plane.length / 3; i++){
-        //     const mesh = this.createMesh()
+        for(let i = 0; i < this.param.seg + 1; i++){
+            // const x = 0
+            const y = offset + gap * i
 
-        //     positionGroup.add(mesh)
+            const mesh = this.createMesh([-offset, y, 0, offset, y, 0])
 
-        // }
+            // mesh.position.set(x, y, 0)
+
+            positionGroup.add(mesh)
+        }
                 
         positionGroup.position.set(0, CHILD_PARAM.y, 0)
 
@@ -64,12 +69,24 @@ export default class{
         return geometry
     }
     createMaterial(){
-        return new THREE.LineBasicMaterial({
-            color: this.param.color,
+        // return new THREE.LineBasicMaterial({
+        //     color: this.param.color,
+        //     transparent: true,
+        //     depthTest: false,
+        //     depthWrite: false,
+        //     opacity: 0.2
+        // })
+        return new THREE.ShaderMaterial({
+            vertexShader: SHADER.vertex,
+            fragmentShader: SHADER.fragment,
             transparent: true,
             depthTest: false,
             depthWrite: false,
-            opacity: 0.25
+            uniforms: {
+                uColor: {value: new THREE.Color(this.param.color)},
+                uDist: {value: this.param.width / 1.2},
+                uOpacity: {value: 0.25}
+            }
         })
     }
 }

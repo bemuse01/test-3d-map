@@ -211,6 +211,7 @@ export default class{
     }
     rotationGroup(){
         for(const group in this.group){
+            // if(group === 'grid') continue
             this.group[group].rotation.z += 0.002
         }
     }
