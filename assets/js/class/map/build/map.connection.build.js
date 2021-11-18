@@ -10,7 +10,7 @@ export default class{
             count: 8,
             radius: 6,
             z: 50,
-            lineTime: 1600,
+            lineTime: 1500,
         }
 
         this.map = map
@@ -172,7 +172,7 @@ export default class{
         // leave
         const tw2 = new TWEEN.Tween(start2)
         .to(end2, time)
-        .delay(Math.random() * 1000 + 1000)
+        .delay(Math.random() * 1000)
         .onUpdate(() => this.updateLineTween(line, start2))
         .onComplete(() => this.completeLineTween2({line, circle, effect, idx}))
 

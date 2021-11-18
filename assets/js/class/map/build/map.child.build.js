@@ -81,8 +81,8 @@ export default class{
 
             const matrix = new THREE.Matrix4()
             
-            const noise1 = SIMPLEX.noise3D(x * 0.002, y * 0.002, i * 0.01)
-            const scale = PUBLIC_METHOD.normalize(noise1, 0.1, 6, -1, 1)
+            const noise1 = SIMPLEX.noise3D(x * 0.002, y * 0.002, window.performance.now() * 0.01)
+            const scale = PUBLIC_METHOD.normalize(noise1, 0.1, 5, -1, 1)
 
             const noise2 = SIMPLEX.noise3D(x * 0.01, y * 0.01, i * 0.02)
             const color = Math.floor(PUBLIC_METHOD.normalize(noise2, 0, 45, -1, 1))
