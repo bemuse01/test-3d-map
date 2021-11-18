@@ -84,8 +84,8 @@ export default class{
             depthWrite: false,
             uniforms: {
                 uColor: {value: new THREE.Color(this.param.color)},
-                uDist: {value: this.param.width / 1.25},
-                uOpacity: {value: 0.3}
+                uDist: {value: this.param.width / 2},
+                uOpacity: {value: 0.25}
             }
         })
     }
