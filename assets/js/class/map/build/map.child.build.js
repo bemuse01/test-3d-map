@@ -81,11 +81,9 @@ export default class{
 
             const matrix = new THREE.Matrix4()
             
-            const noise1 = SIMPLEX.noise3D(x * 0.002, y * 0.002, window.performance.now() * 0.01)
-            const scale = PUBLIC_METHOD.normalize(noise1, 0.1, 4, -1, 1)
-
-            const noise2 = SIMPLEX.noise3D(x * 0.005, y * 0.01, window.performance.now() * 0.01)
-            const color = Math.floor(PUBLIC_METHOD.normalize(noise2, 3, 40, -1, 1)) * (Math.random() > 0.9 ? 2 : 1)
+            const noise = SIMPLEX.noise3D(x * 0.005, y * 0.01, window.performance.now() * 0.001)
+            const scale = PUBLIC_METHOD.normalize(noise, 0.1, 4, -1, 1)
+            const color = Math.floor(PUBLIC_METHOD.normalize(noise, 3, 35, -1, 1)) * (Math.random() > 0.9 ? 2 : 1)
             
             matrix.multiply(new THREE.Matrix4().makeTranslation(x, y, 0))
             matrix.multiply(new THREE.Matrix4().makeScale(1, 1, scale))
