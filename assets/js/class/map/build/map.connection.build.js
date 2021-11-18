@@ -94,7 +94,8 @@ export default class{
             color: this.param.color,
             transparent: true,
             depthWrite: false,
-            depthTest: false
+            depthTest: false,
+            // opacity: 0.9
         })
     }
     // circle

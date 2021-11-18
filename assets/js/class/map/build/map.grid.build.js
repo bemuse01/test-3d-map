@@ -8,7 +8,8 @@ export default class{
             color: 0x32eaff,
             width: 1600,
             height: 1600,
-            seg: 16 - 1
+            seg: 12 - 1,
+            zdist: 250
         }
 
         this.init(group)
@@ -31,24 +32,24 @@ export default class{
 
         for(let i = 0; i < this.param.seg + 1; i++){
             const x = offset + gap * i
-            // const y = 0
+            const y = offset + gap * i
 
-            const mesh = this.createMesh([x, -offset, 0, x, offset, 0])
+            const xmesh = this.createMesh([x, -offset, 0, x, offset, 0])
+            const ymesh = this.createMesh([-offset, y, 0, offset, y, 0])
 
-            // mesh.position.set(x, y, 0)
-
-            positionGroup.add(mesh)
+            positionGroup.add(xmesh)
+            positionGroup.add(ymesh)
         }
 
         for(let i = 0; i < this.param.seg + 1; i++){
-            // const x = 0
-            const y = offset + gap * i
+            for(let j = 0; j < this.param.seg + 1; j++){
+                const x = offset + gap * i
+                const y = offset + gap * j
 
-            const mesh = this.createMesh([-offset, y, 0, offset, y, 0])
+                const mesh = this.createMesh([x, y, this.param.zdist, x, y, 0])
 
-            // mesh.position.set(x, y, 0)
-
-            positionGroup.add(mesh)
+                positionGroup.add(mesh)
+            }
         }
                 
         positionGroup.position.set(0, CHILD_PARAM.y, 0)
@@ -85,7 +86,8 @@ export default class{
             uniforms: {
                 uColor: {value: new THREE.Color(this.param.color)},
                 uDist: {value: this.param.width / 2},
-                uOpacity: {value: 0.25}
+                uOpacity: {value: 0.5},
+                uZdist: {value: this.param.zdist}
             }
         })
     }
