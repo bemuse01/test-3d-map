@@ -1,12 +1,15 @@
 import * as THREE from '../../lib/three.module.js'
 import PARAM from './param/map.param.js'
 import PUBLIC_METHOD from '../../method/method.js'
+
 import CHILD from './build/map.child.build.js'
 import MIRROR from './build/map.mirror.build.js'
 import EPICENTER from './build/map.epicenter.build.js'
 import RADAR from './build/map.radar.build.js'
 import CONNECTION from './build/map.connection.build.js'
 import GRID from './build/map.grid.build.js'
+import TARGET from './build/map.target.build.js'
+
 import JP from '../../data/jp_points.js'
 import KR from '../../data/kr_points.js'
 import US from '../../data/us_points.js'
@@ -26,7 +29,8 @@ export default class{
             epicenter: EPICENTER,
             radar: RADAR,
             connection: CONNECTION,
-            grid: GRID
+            grid: GRID,
+            target: TARGET
         }
         this.group = {}
         this.comp = {}
