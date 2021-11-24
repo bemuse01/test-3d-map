@@ -6,14 +6,16 @@ export default class{
     constructor({group}){
         this.param = {
             color: 0xff3232,
-            size: 40,
+            size: 30,
             z: 40,
-            width: 800,
-            height: 800,
-            bound: 200,
+            width: 500,
+            height: 500,
+            bound: 250,
             count: 12,
             gap: 0.005
         }
+
+        this.tw = []
 
         this.init(group)
     }
@@ -71,7 +73,7 @@ export default class{
         return new THREE.MeshBasicMaterial({
             color: this.param.color,
             transparent: true,
-            opacity: 1.0,
+            opacity: 0,
             // depthWrite: false,
             // depthTest: false,
             // blending: THREE.AdditiveBlending
@@ -111,40 +113,101 @@ export default class{
 
     // tween
     initTween(){
-        const children = this.wrapper.children[0].children
+        // const children = this.wrapper.children[0].children
 
-        children.forEach(local => this.createMoveTween(local))
+        // children.forEach(local => this.createMoveTween(local))
+
+        // window.addEventListener('click', () => this.removeMoveTween())
+
+        this.createOpenTween()
     }
     // open
     createOpenTween(){
-        
+        const children = this.wrapper.children[0].children
+
+        children.forEach((group, i) => {
+            const [line, tri] = group.children
+
+            const route = METHOD.createRoute(this.param)
+
+            const start = {opacity: 0}
+            const end = {opacity: [1, 0, 1, 0, 1]}
+
+            const tw = new TWEEN.Tween(start)
+            .to(end, 200)
+            .onStart(() => this.startOpenTween({tri, line, ...route}))
+            .onUpdate(() => this.updateOpenTween(tri, start))
+            .onComplete(() => this.completeOpenTween(line, tri, route, i))
+            .delay(i * 50)
+            .start()
+        })
     }
-    // move
-    createMoveTween(group){
-        const {x, y, theta, dist} = METHOD.createRoute(this.param)
-
-        const [line, tri] = group.children
-
-        const start = {x: x, y: y}
-        const end = {x: -x, y: -y}
-
-        const tw = new TWEEN.Tween(start)
-        .to(end, 120000 + dist * 2)
-        .onStart(() => this.startMoveTween({tri, line, x, y, theta}))
-        .onUpdate(() => this.updateMoveTween({tri, line, dist, start, x, y}))
-        .start()
-    }
-    startMoveTween({tri, line, x, y, theta}){
+    startOpenTween({tri, line, x, y, theta}){
         tri.position.set(x, y, 0)
         tri.rotation.z = theta + 90 * RADIAN
         
         line.geometry.dispose()
         line.geometry = this.createLineGeometry({x, y})
     }
+    updateOpenTween(tri, {opacity}){
+        tri.material.opacity = opacity
+    }
+    completeOpenTween(line, tri, route, idx){
+        this.createMoveTween(line, tri, route, idx)
+    }
+    // close
+    createCloseTween(){
+        const children = this.wrapper.children[0].children
+
+        children.forEach((group, i) => {
+            const [line, tri] = group.children
+
+            const route = METHOD.createRoute(this.param)
+
+            const start = {opacity: 1}
+            const end = {opacity: [0, 1, 0]}
+
+            const tw = new TWEEN.Tween(start)
+            .to(end, 100)
+            .onStart(() => this.startCloseTween(line))
+            .onUpdate(() => this.updateCloseTween(tri, start))
+            .onComplete(() => this.completeCloseTween(line, tri, route, i))
+            .delay(i * 50)
+            .start()
+        })
+    }
+    startCloseTween(line){
+        line.material.opacity = 0
+    }
+    updateCloseTween(tri, {opacity}){
+        tri.material.opacity = opacity
+    }
+    completeCloseTween(){
+        this.removeMoveTween()
+    }
+    // move
+    createMoveTween(line, tri, route, idx){
+        const {x, y, dist} = route
+
+        const start = {x: x, y: y}
+        const end = {x: -x, y: -y}
+
+        this.tw[idx] = new TWEEN.Tween(start)
+        .to(end, 120000 + dist * 2)
+        .onUpdate(() => this.updateMoveTween({tri, line, dist, start, x, y}))
+        .start()
+
+    }
     updateMoveTween({tri, line, dist, start, x, y}){
         const currentDist = Math.sqrt((x - start.x) ** 2 + (y - start.y) ** 2)
 
         tri.position.set(start.x, start.y, 0)
         line.geometry.setDrawRange(0, currentDist / dist * line.geometry.draw)
+    }
+    removeMoveTween(){
+        for(let i = 0; i < this.tw.length; i++){
+            TWEEN.remove(this.tw[i])
+            this.tw[i] = null
+        }
     }
 }
