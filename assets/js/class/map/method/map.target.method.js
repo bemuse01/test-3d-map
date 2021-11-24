@@ -1,4 +1,4 @@
-import {Vector2} from '../../../lib/three.module.js'
+import PUBLIC_METHOD from '../../../method/method.js'
 
 export default {
     createAttribute({size}){
@@ -30,12 +30,9 @@ export default {
         const x = ((rand[0] / 255) * (width - bound) + bound) * xsign
         const y = ((rand[1] / 255) * (height - bound) + bound) * ysign
 
-        const sign = Math.sign(y)
-        const v1 = new Vector2(x, y)
-        const v2 = new Vector2(Math.abs(x), 0)
-        const out = v1.x * v2.x + v1.y * v2.y
-        const dot = Math.sqrt(v1.x ** 2 + v1.y ** 2) * Math.sqrt(v2.x ** 2 + v2.y ** 2)
-        const theta = Math.acos(out / dot) * sign
+        const v1 = {x, y}
+        const v2 = {x: Math.abs(x), y: 0}
+        const theta = PUBLIC_METHOD.getCrossLineTheta(v1, v2)
 
         return {x, y, theta}
     }

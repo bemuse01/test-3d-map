@@ -56,5 +56,12 @@ export default {
         const x = Math.cos((p0.lat + p1.lat) / 2) * w * lon * 0.01
         const y = lat * w * 0.01
         return {x, y}
+    },
+    getCrossLineTheta(v1 = {x, y}, v2 = {x, y}){
+        const sign = Math.sign(v1.y)
+        const out = v1.x * v2.x + v1.y * v2.y
+        const dot = Math.sqrt(v1.x ** 2 + v1.y ** 2) * Math.sqrt(v2.x ** 2 + v2.y ** 2)
+        const theta = Math.acos(out / dot) * sign
+        return theta
     }
 }

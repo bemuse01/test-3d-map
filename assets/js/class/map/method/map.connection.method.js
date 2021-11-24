@@ -1,4 +1,4 @@
-import * as THREE from '../../../lib/three.module.js'
+import PUBLIC_METHOD from '../../../method/method.js'
 
 export default {
     getCenterPosition(p1, p2, {width, height}){
@@ -19,12 +19,9 @@ export default {
 
         const radius = Math.sqrt((pp1.x - pp2.x) ** 2 + (pp1.y - pp2.y) ** 2) / 2
 
-        const sign = Math.sign(pp1.y - cy)
-        const v1 = new THREE.Vector2(pp1.x - cx, pp1.y - cy)
-        const v2 = new THREE.Vector2(pp1.x + cx, 0)
-        const out = v1.x * v2.x + v1.y * v2.y
-        const dot = Math.sqrt(v1.x ** 2 + v1.y ** 2) * Math.sqrt(v2.x ** 2 + v2.y ** 2)
-        const theta = Math.acos(out / dot) * sign
+        const v1 = {x: pp1.x - cx, y: pp1.y - cy}
+        const v2 = {x: pp1.x + cx, y: 0}
+        const theta = PUBLIC_METHOD.getCrossLineTheta(v1, v2)
     
         return {theta, radius, cx, cy, dest: pp2}
     }

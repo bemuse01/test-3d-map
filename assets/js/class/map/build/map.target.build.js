@@ -11,7 +11,7 @@ export default class{
             width: 800,
             height: 800,
             bound: 200,
-            count: 1
+            count: 12
         }
 
         this.init(group)
@@ -20,7 +20,7 @@ export default class{
 
     // init
     init(group){
-        // this.create(group)
+        this.create(group)
         // this.initTween()
     }
 
@@ -31,18 +31,26 @@ export default class{
         this.wrapper = new THREE.Group()
 
         for(let i = 0; i < this.param.count; i++){
+            const local = new THREE.Group()
+            
             const {x, y, theta} = METHOD.createRoute(this.param)
 
             // tri
             const tri = this.createTriMesh()
             tri.position.set(x, y, 0)
+            tri.rotation.z = theta + 90 * RADIAN
+            local.add(tri)
 
             // line
             const line = this.createLineMesh()
+            line.position.set(x, y, 0)
             line.rotation.z = theta
+            local.add(line)
 
-            positionGroup.add(tri)
-            positionGroup.add(line)
+            local.position.set(Math.random() * this.param.width - this.param.width / 2, Math.random() * this.param.height - this.param.height / 2, 0)
+
+            positionGroup.add(local)
+            // positionGroup.add(line)
         }
 
         positionGroup.position.set(0, CHILD_PARAM.y, this.param.z)
@@ -104,7 +112,7 @@ export default class{
     initTween(){
         const children = this.wrapper.children[0].children
 
-        children.forEach(child => this.createMoveTween(child))
+        children.forEach(local => this.createMoveTween(local.children[0]))
     }
     // open
     createOpenTween(){
@@ -114,7 +122,8 @@ export default class{
     createMoveTween(mesh){
         const {x, y, theta} = METHOD.createRoute(this.param)
 
-        mesh.rotation.z = theta
+        mesh.position.set(x, y, 0)
+        mesh.rotation.z = theta + 90 * RADIAN
 
         const start = {x: x, y: y}
         const end = {x: -x, y: -y}
