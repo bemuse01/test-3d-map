@@ -98,7 +98,8 @@ export default class{
         const isTweenPlay = {
             child: false,
             epicenter: false,
-            connection: false
+            connection: false,
+            // target: false
         }
 
         this.proxy = new Proxy(isTweenPlay, {
@@ -111,14 +112,14 @@ export default class{
                 // start tweens after child tween done
                 if(prop === 'child' && obj['child'] === true){
                     self.play = true
-                    self.executeEffect()
+                    self.executeTween()
                 }
 
                 // disappear current map and display new map
                 if(this.isAllTrue(obj)){
                     self.setProxyToFalse()
                     self.setMap()
-                    self.comp['child'].close(self.group['child'])
+                    self.executeClose()
                 }
                 
                 return true
@@ -164,9 +165,16 @@ export default class{
 
 
     // execute
-    executeEffect(){
+    executeTween(){
         this.comp.epicenter.initTween()
         this.comp.connection.initTween()
+        this.comp.target.initTween()
+    }
+    executeClose(){
+        for(const comp in this.comp){
+            if(!this.comp[comp].close) continue
+            this.comp[comp].close(this.group[comp])
+        }
     }
 
 

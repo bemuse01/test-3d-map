@@ -12,7 +12,8 @@ export default class{
             height: 500,
             bound: 250,
             count: 12,
-            gap: 0.005
+            gap: 0.005,
+            lineOpacity: 0.5
         }
 
         this.tw = []
@@ -24,7 +25,13 @@ export default class{
     // init
     init(group){
         this.create(group)
-        this.initTween()
+        // this.initTween()
+    }
+
+
+    // close
+    close(){
+        this.createCloseTween()
     }
 
 
@@ -102,7 +109,7 @@ export default class{
         return new THREE.LineBasicMaterial({
             color: this.param.color,
             transparent: true,
-            opacity: 0.5,
+            opacity: this.param.lineOpacity,
             depthWrite: false,
             depthTest: false,
             blending: THREE.AdditiveBlending
@@ -148,6 +155,7 @@ export default class{
         
         line.geometry.dispose()
         line.geometry = this.createLineGeometry({x, y})
+        line.material.opacity = this.param.lineOpacity
     }
     updateOpenTween(tri, {opacity}){
         tri.material.opacity = opacity
@@ -193,12 +201,12 @@ export default class{
         const end = {x: -x, y: -y}
 
         this.tw[idx] = new TWEEN.Tween(start)
-        .to(end, 120000 + dist * 2)
-        .onUpdate(() => this.updateMoveTween({tri, line, dist, start, x, y}))
+        .to(end, 80000 + dist * 2)
+        .onUpdate(() => this.updateMoveTween({tri, line, dist, start, x, y, idx}))
         .start()
 
     }
-    updateMoveTween({tri, line, dist, start, x, y}){
+    updateMoveTween({tri, line, dist, start, x, y, idx}){
         const currentDist = Math.sqrt((x - start.x) ** 2 + (y - start.y) ** 2)
 
         tri.position.set(start.x, start.y, 0)
@@ -207,7 +215,7 @@ export default class{
     removeMoveTween(){
         for(let i = 0; i < this.tw.length; i++){
             TWEEN.remove(this.tw[i])
-            this.tw[i] = null
+            // this.tw[i] = null
         }
     }
 }
