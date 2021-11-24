@@ -11,7 +11,8 @@ export default class{
             width: 800,
             height: 800,
             bound: 200,
-            count: 12
+            count: 12,
+            gap: 0.005
         }
 
         this.init(group)
@@ -21,7 +22,7 @@ export default class{
     // init
     init(group){
         this.create(group)
-        // this.initTween()
+        this.initTween()
     }
 
 
@@ -33,19 +34,20 @@ export default class{
         for(let i = 0; i < this.param.count; i++){
             const local = new THREE.Group()
             
-            const {x, y, theta} = METHOD.createRoute(this.param)
-
-            // tri
-            const tri = this.createTriMesh()
-            tri.position.set(x, y, 0)
-            tri.rotation.z = theta + 90 * RADIAN
-            local.add(tri)
+            // const {x, y, theta} = METHOD.createRoute(this.param)
 
             // line
             const line = this.createLineMesh()
-            line.position.set(x, y, 0)
-            line.rotation.z = theta
+            // line.position.set(x, y, 0)
+            // line.rotation.z = theta
             local.add(line)
+
+
+            // tri
+            const tri = this.createTriMesh()
+            // tri.position.set(x, y, 0)
+            // tri.rotation.z = theta + 90 * RADIAN
+            local.add(tri)
 
             local.position.set(Math.random() * this.param.width - this.param.width / 2, Math.random() * this.param.height - this.param.height / 2, 0)
 
@@ -78,23 +80,27 @@ export default class{
             color: this.param.color,
             transparent: true,
             opacity: 1.0,
-            depthWrite: false,
-            depthTest: false,
-            blending: THREE.AdditiveBlending
+            // depthWrite: false,
+            // depthTest: false,
+            // blending: THREE.AdditiveBlending
         })
     }
     // line
-    createLineMesh(){
-        const geometry = this.createLineGeometry()
+    createLineMesh(route = {}){
+        const geometry = this.createLineGeometry(route)
         const material = this.createLineMaterial()
         return new THREE.Line(geometry, material)
     }
-    createLineGeometry(){
+    createLineGeometry({x, y}){
         const geometry = new THREE.BufferGeometry()
         
-        const position = new Float32Array([-800, 0, 0, 800, 0, 0])
+        const {position, draw} = METHOD.createLineAttribute({x, y, ...this.param})
 
         geometry.setAttribute('position', new THREE.BufferAttribute(position, 3))
+        geometry.attributes.position.needsUpdate = true
+        geometry.draw = draw
+
+        geometry.setDrawRange(0, 0)
 
         return geometry
     }
@@ -102,7 +108,10 @@ export default class{
         return new THREE.LineBasicMaterial({
             color: this.param.color,
             transparent: true,
-            opacity: 1.0
+            opacity: 0.5,
+            depthWrite: false,
+            depthTest: false,
+            blending: THREE.AdditiveBlending
         })
     }
 
@@ -112,28 +121,43 @@ export default class{
     initTween(){
         const children = this.wrapper.children[0].children
 
-        children.forEach(local => this.createMoveTween(local.children[0]))
+        children.forEach(local => this.createMoveTween(local))
     }
     // open
     createOpenTween(){
         
     }
     // move
-    createMoveTween(mesh){
-        const {x, y, theta} = METHOD.createRoute(this.param)
+    createMoveTween(group){
+        const {x, y, theta, dist} = METHOD.createRoute(this.param)
 
-        mesh.position.set(x, y, 0)
-        mesh.rotation.z = theta + 90 * RADIAN
+        const [line, tri] = group.children
 
         const start = {x: x, y: y}
         const end = {x: -x, y: -y}
 
         const tw = new TWEEN.Tween(start)
-        .to(end, 10000)
-        .onUpdate(() => this.updateMoveTween(mesh, start))
+        .to(end, 120000 + dist * 2)
+        .onStart(() => this.startMoveTween({tri, line, x, y, theta}))
+        .onUpdate(() => this.updateMoveTween({tri, line, dist, start, x, y}))
         .start()
     }
-    updateMoveTween(mesh, {x, y}){
-        mesh.position.set(x, y, 0)
+    startMoveTween({tri, line, x, y, theta}){
+        tri.position.set(x, y, 0)
+        tri.rotation.z = theta + 90 * RADIAN
+        
+        line.geometry.dispose()
+        line.geometry = this.createLineGeometry({x, y})
+
+        // line.position.set(x + Math.sign(x) * x / 2, y + Math.sign(x) * y / 2, 0)
+        // line.rotation.z = theta
+    }
+    updateMoveTween({tri, line, dist, start, x, y}){
+        const currentDist = Math.sqrt((x - start.x) ** 2 + (y - start.y) ** 2)
+
+        // console.log(currentDist / dist)
+
+        tri.position.set(start.x, start.y, 0)
+        line.geometry.setDrawRange(0, currentDist / dist * line.geometry.draw)
     }
 }

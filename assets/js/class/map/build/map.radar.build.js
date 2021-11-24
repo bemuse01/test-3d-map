@@ -1,5 +1,4 @@
 import * as THREE from '../../../lib/three.module.js'
-import CHILD_PARAM from '../param/map.child.param.js'
 
 export default class{
     constructor({group}){

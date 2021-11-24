@@ -10,9 +10,9 @@ import CONNECTION from './build/map.connection.build.js'
 import GRID from './build/map.grid.build.js'
 import TARGET from './build/map.target.build.js'
 
-import JP from '../../data/jp_points.js'
-import KR from '../../data/kr_points.js'
-import US from '../../data/us_points.js'
+import JP from '../../data/jp_points.min.js'
+import KR from '../../data/kr_points.min.js'
+import US from '../../data/us_points.min.js'
 
 export default class{
     constructor(){

@@ -1,3 +1,4 @@
+import * as THREE from '../../../lib/three.module.js'
 import PUBLIC_METHOD from '../../../method/method.js'
 
 export default {
@@ -34,6 +35,29 @@ export default {
         const v2 = {x: Math.abs(x), y: 0}
         const theta = PUBLIC_METHOD.getCrossLineTheta(v1, v2)
 
-        return {x, y, theta}
+        const dist = Math.sqrt((-x - x) ** 2 + (-y - y) ** 2)
+
+        return {x, y, theta, dist}
+    },
+    createLineAttribute({x, y, gap}){
+        if(!x || !y) return {position: new Float32Array(0, 0, 0, 0, 0, 0), draw: undefined}
+      
+        const dist = Math.abs(x) * 2
+        const g = dist * gap
+        const len = ~~(dist / g)
+        const sign = -Math.sign(x)
+
+        const position = new Float32Array(len * 3)
+
+        for(let i = 0; i < len; i++){
+            const nx = x + g * i * sign
+            const r = PUBLIC_METHOD.linearInterpolate(x, -x, nx)
+            const ny = y + (-y - y) * r
+
+            position[i * 3] = nx
+            position[i * 3 + 1] = ny
+        }
+
+        return {position, draw: len}
     }
 }

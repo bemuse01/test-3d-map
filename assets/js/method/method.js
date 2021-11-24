@@ -63,5 +63,10 @@ export default {
         const dot = Math.sqrt(v1.x ** 2 + v1.y ** 2) * Math.sqrt(v2.x ** 2 + v2.y ** 2)
         const theta = Math.acos(out / dot) * sign
         return theta
+    },
+    linearInterpolate(x1, x2, x){
+        const d1 = x2 - x1
+        const d2 = x - x1
+        return d2 / d1
     }
 }
