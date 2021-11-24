@@ -48,15 +48,6 @@ export default {
         const z = radius * Math.sin(phi) * Math.sin(theta)
         return {x, y, z}
     },
-    getFlatCoord(lat, lon, w, h){
-        // const x = (w / 360) * (180 + lon)
-        // const y = (h / 180) * (90 - lat)
-        const p0 = {lat: 46.147368, lon: 127.758144}
-        const p1 = {lat: 29.429502, lon: 147.417382}
-        const x = Math.cos((p0.lat + p1.lat) / 2) * w * lon * 0.01
-        const y = lat * w * 0.01
-        return {x, y}
-    },
     getCrossLineTheta(v1 = {x, y}, v2 = {x, y}){
         const sign = Math.sign(v1.y)
         const out = v1.x * v2.x + v1.y * v2.y
