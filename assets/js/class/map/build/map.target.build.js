@@ -6,14 +6,14 @@ export default class{
     constructor({group}){
         this.param = {
             color: 0xff3232,
-            size: 30,
-            z: 40,
+            size: 25,
+            z: 30,
             width: 500,
             height: 500,
             bound: 250,
             count: 12,
             gap: 0.005,
-            lineOpacity: 0.5
+            lineOpacity: 0.4
         }
 
         this.tw = []
@@ -83,7 +83,8 @@ export default class{
             opacity: 0,
             // depthWrite: false,
             // depthTest: false,
-            // blending: THREE.AdditiveBlending
+            // blending: THREE.AdditiveBlending,
+            side: THREE.DoubleSide
         })
     }
     // line
@@ -201,7 +202,7 @@ export default class{
         const end = {x: -x, y: -y}
 
         this.tw[idx] = new TWEEN.Tween(start)
-        .to(end, 80000 + dist * 2)
+        .to(end, 60000 + dist * 2)
         .onUpdate(() => this.updateMoveTween({tri, line, dist, start, x, y, idx}))
         .start()
 

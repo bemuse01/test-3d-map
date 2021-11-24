@@ -9,7 +9,7 @@ export default class{
             width: 1600,
             height: 1600,
             seg: 12 - 1,
-            zdist: 200
+            zdist: 150
         }
 
         this.init(group)
@@ -85,8 +85,8 @@ export default class{
             depthWrite: false,
             uniforms: {
                 uColor: {value: new THREE.Color(this.param.color)},
-                uDist: {value: this.param.width / 1.8},
-                uOpacity: {value: 0.5},
+                uDist: {value: this.param.width / 2.0},
+                uOpacity: {value: 0.4},
                 uZdist: {value: this.param.zdist}
             }
         })
