@@ -34,25 +34,17 @@ export default class{
         for(let i = 0; i < this.param.count; i++){
             const local = new THREE.Group()
             
-            // const {x, y, theta} = METHOD.createRoute(this.param)
-
             // line
             const line = this.createLineMesh()
-            // line.position.set(x, y, 0)
-            // line.rotation.z = theta
             local.add(line)
-
 
             // tri
             const tri = this.createTriMesh()
-            // tri.position.set(x, y, 0)
-            // tri.rotation.z = theta + 90 * RADIAN
             local.add(tri)
 
             local.position.set(Math.random() * this.param.width - this.param.width / 2, Math.random() * this.param.height - this.param.height / 2, 0)
 
             positionGroup.add(local)
-            // positionGroup.add(line)
         }
 
         positionGroup.position.set(0, CHILD_PARAM.y, this.param.z)
@@ -148,14 +140,9 @@ export default class{
         
         line.geometry.dispose()
         line.geometry = this.createLineGeometry({x, y})
-
-        // line.position.set(x + Math.sign(x) * x / 2, y + Math.sign(x) * y / 2, 0)
-        // line.rotation.z = theta
     }
     updateMoveTween({tri, line, dist, start, x, y}){
         const currentDist = Math.sqrt((x - start.x) ** 2 + (y - start.y) ** 2)
-
-        // console.log(currentDist / dist)
 
         tri.position.set(start.x, start.y, 0)
         line.geometry.setDrawRange(0, currentDist / dist * line.geometry.draw)
