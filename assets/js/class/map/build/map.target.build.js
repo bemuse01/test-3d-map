@@ -20,8 +20,8 @@ export default class{
                 1 // plane
             ],
             length: 100,
-            planeWidth: 1920 * 0.04,
-            planeHeight: 1080 * 0.025
+            planeWidth: ~~(1920 * 0.02),
+            planeHeight: ~~(1080 * 0.02)
         }
 
         this.tw = []

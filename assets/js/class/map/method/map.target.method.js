@@ -74,7 +74,7 @@ export default {
         ctx.font = '14px Arial'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
-        ctx.fillStyle = 'red'
+        ctx.fillStyle = '#ff3232'
         ctx.fillText(~~(window.performance.now()), width / 2, height / 2)
     }
 }
