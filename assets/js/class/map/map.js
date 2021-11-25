@@ -144,7 +144,7 @@ export default class{
 
             group.rotation.x = PARAM.rotation * RADIAN
 
-            this.comp[module] = new instance({group, size: this.size, map: this.map.jp, parent: this, proxy: this.proxy})
+            this.comp[module] = new instance({group, size: this.size, map: this.map.jp, parent: this, proxy: this.proxy, camera: this.camera})
         }
     }
 
@@ -218,7 +218,7 @@ export default class{
     animateObject(){
         for(let i in this.comp){
             if(!this.comp[i] || !this.comp[i].animate) continue
-            this.comp[i].animate()
+            this.comp[i].animate({camera: this.camera})
         }
     }
     rotationGroup(){

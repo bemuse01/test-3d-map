@@ -3,7 +3,7 @@ import METHOD from '../method/map.target.method.js'
 import CHILD_PARAM from '../param/map.child.param.js'
 
 export default class{
-    constructor({group}){
+    constructor({group, camera}){
         this.param = {
             color: 0xff3232,
             size: 25,
@@ -13,10 +13,19 @@ export default class{
             bound: 250,
             count: 12,
             gap: 0.005,
-            lineOpacity: 0.4
+            lineOpacity: 0.4,
+            moveGroupOpacity: [
+                1, // triangle
+                0.6 // vertical line
+            ],
+            length: 100
         }
 
+        console.log(camera)
+
         this.tw = []
+        this.mouse = new THREE.Vector2()
+        this.raycaster = new THREE.Raycaster()
 
         this.init(group)
     }
@@ -26,6 +35,7 @@ export default class{
     init(group){
         this.create(group)
         // this.initTween()
+        window.addEventListener('mousemove', (e) => this.onMousemove(e))
     }
 
 
@@ -41,19 +51,25 @@ export default class{
         this.wrapper = new THREE.Group()
 
         for(let i = 0; i < this.param.count; i++){
-            const local = new THREE.Group()
+            const localGroup = new THREE.Group()
+            const moveGroup = new THREE.Group()
             
             // line
-            const line = this.createLineMesh()
-            local.add(line)
+            const line = this.createLineMesh(this.param.lineOpacity)
+            localGroup.add(line)
 
             // tri
             const tri = this.createTriMesh()
-            local.add(tri)
+            moveGroup.add(tri)
 
-            local.position.set(Math.random() * this.param.width - this.param.width / 2, Math.random() * this.param.height - this.param.height / 2, 0)
+            // vertical line
+            const verLine = this.createVertLineMesh(0)
+            moveGroup.add(verLine)
 
-            positionGroup.add(local)
+            localGroup.position.set(Math.random() * this.param.width - this.param.width / 2, Math.random() * this.param.height - this.param.height / 2, 0)
+
+            localGroup.add(moveGroup)
+            positionGroup.add(localGroup)
         }
 
         positionGroup.position.set(0, CHILD_PARAM.y, this.param.z)
@@ -88,12 +104,12 @@ export default class{
         })
     }
     // line
-    createLineMesh(route = {}){
-        const geometry = this.createLineGeometry(route)
-        const material = this.createLineMaterial()
-        return new THREE.Line(geometry, material)
+    createLineMesh(opacity){
+        const geometry = this.createLineGeometry()
+        const material = this.createLineMaterial(opacity)
+        return new THREE.LineSegments(geometry, material)
     }
-    createLineGeometry({x, y}){
+    createLineGeometry({x, y} = {}){
         const geometry = new THREE.BufferGeometry()
         
         const {position, draw} = METHOD.createLineAttribute({x, y, ...this.param})
@@ -106,35 +122,44 @@ export default class{
 
         return geometry
     }
-    createLineMaterial(){
+    createLineMaterial(opacity){
         return new THREE.LineBasicMaterial({
             color: this.param.color,
             transparent: true,
-            opacity: this.param.lineOpacity,
+            opacity: opacity,
             depthWrite: false,
             depthTest: false,
             blending: THREE.AdditiveBlending
         })
     }
+    // vertical line
+    createVertLineMesh(opacity){
+        const geometry = this.createVerLineGeometry()
+        const material = this.createLineMaterial(opacity)
+        return new THREE.Line(geometry, material)
+    }
+    createVerLineGeometry(){
+        const geometry = new THREE.BufferGeometry()
 
+        const y = (1 / (Math.sqrt(3) * 2)) * this.param.size / 2
+        const position = new Float32Array([0, -y, 0, 0, -y, this.param.length])
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(position, 3))
+
+        return geometry
+    }
 
 
     // tween
     initTween(){
-        // const children = this.wrapper.children[0].children
-
-        // children.forEach(local => this.createMoveTween(local))
-
-        // window.addEventListener('click', () => this.removeMoveTween())
-
         this.createOpenTween()
     }
     // open
     createOpenTween(){
         const children = this.wrapper.children[0].children
 
-        children.forEach((group, i) => {
-            const [line, tri] = group.children
+        children.forEach((localGroup, i) => {
+            const [line, moveGroup] = localGroup.children
 
             const route = METHOD.createRoute(this.param)
 
@@ -143,33 +168,37 @@ export default class{
 
             const tw = new TWEEN.Tween(start)
             .to(end, 200)
-            .onStart(() => this.startOpenTween({tri, line, ...route}))
-            .onUpdate(() => this.updateOpenTween(tri, start))
-            .onComplete(() => this.completeOpenTween(line, tri, route, i))
+            .onStart(() => this.startOpenTween({line, moveGroup, ...route}))
+            .onUpdate(() => this.updateOpenTween(moveGroup, start))
+            .onComplete(() => this.completeOpenTween(line, moveGroup, route, i))
             .delay(i * 50)
             .start()
         })
     }
-    startOpenTween({tri, line, x, y, theta}){
-        tri.position.set(x, y, 0)
-        tri.rotation.z = theta + 90 * RADIAN
+    startOpenTween({line, moveGroup, x, y, theta}){
+        // const [tri, verLine] = moveGroup.children
+
+        moveGroup.position.set(x, y, 0)
+        moveGroup.rotation.z = theta + 90 * RADIAN
         
         line.geometry.dispose()
         line.geometry = this.createLineGeometry({x, y})
         line.material.opacity = this.param.lineOpacity
+
+        // tri.rotation.z = theta + 90 * RADIAN
     }
-    updateOpenTween(tri, {opacity}){
-        tri.material.opacity = opacity
+    updateOpenTween(moveGroup, {opacity}){
+        moveGroup.children.forEach((child, i) => child.material.opacity = opacity * this.param.moveGroupOpacity[i])
     }
-    completeOpenTween(line, tri, route, idx){
-        this.createMoveTween(line, tri, route, idx)
+    completeOpenTween(line, moveGroup, route, idx){
+        this.createMoveTween(line, moveGroup, route, idx)
     }
     // close
     createCloseTween(){
         const children = this.wrapper.children[0].children
 
         children.forEach((group, i) => {
-            const [line, tri] = group.children
+            const [line, moveGroup] = group.children
 
             const route = METHOD.createRoute(this.param)
 
@@ -179,8 +208,8 @@ export default class{
             const tw = new TWEEN.Tween(start)
             .to(end, 100)
             .onStart(() => this.startCloseTween(line))
-            .onUpdate(() => this.updateCloseTween(tri, start))
-            .onComplete(() => this.completeCloseTween(line, tri, route, i))
+            .onUpdate(() => this.updateCloseTween(moveGroup, start))
+            .onComplete(() => this.completeCloseTween())
             .delay(i * 50)
             .start()
         })
@@ -188,29 +217,28 @@ export default class{
     startCloseTween(line){
         line.material.opacity = 0
     }
-    updateCloseTween(tri, {opacity}){
-        tri.material.opacity = opacity
+    updateCloseTween(moveGroup, {opacity}){
+        moveGroup.children.forEach((child, i) => child.material.opacity = opacity * this.param.moveGroupOpacity[i])
     }
     completeCloseTween(){
         this.removeMoveTween()
     }
     // move
-    createMoveTween(line, tri, route, idx){
+    createMoveTween(line, moveGroup, route, idx){
         const {x, y, dist} = route
 
         const start = {x: x, y: y}
         const end = {x: -x, y: -y}
 
         this.tw[idx] = new TWEEN.Tween(start)
-        .to(end, 60000 + dist * 2)
-        .onUpdate(() => this.updateMoveTween({tri, line, dist, start, x, y, idx}))
+        .to(end, 70000 + dist * 2)
+        .onUpdate(() => this.updateMoveTween({line, moveGroup, dist, start, x, y, idx}))
         .start()
-
     }
-    updateMoveTween({tri, line, dist, start, x, y, idx}){
+    updateMoveTween({line, moveGroup, dist, start, x, y, idx}){
         const currentDist = Math.sqrt((x - start.x) ** 2 + (y - start.y) ** 2)
 
-        tri.position.set(start.x, start.y, 0)
+        moveGroup.position.set(start.x, start.y, 0)
         line.geometry.setDrawRange(0, currentDist / dist * line.geometry.draw)
     }
     removeMoveTween(){
@@ -218,5 +246,24 @@ export default class{
             TWEEN.remove(this.tw[i])
             // this.tw[i] = null
         }
+    }
+
+
+    // event
+    onMousemove(e){
+        this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1
+        this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1
+    }
+
+
+    // animate
+    animate({camera}){
+        // console.log(camera.position)
+        // this.raycaster.set(new THREE.Vector3(0, 0, 1000), new THREE.Vector3(0, 0, -1))
+        // const intersects = this.raycaster.intersectObjects(this.wrapper.children[0].children.map(child => child.children[1]))
+        // for(let i = 0; i < intersects.length; i++){
+        //     intersects[i].object.material.color = new THREE.Color(0x32eaff)
+        // }
+        // console.log(intersects.length)
     }
 }
