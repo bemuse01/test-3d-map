@@ -3,7 +3,7 @@ import METHOD from '../method/map.target.method.js'
 import CHILD_PARAM from '../param/map.child.param.js'
 
 export default class{
-    constructor({group, camera}){
+    constructor({group}){
         this.param = {
             color: 0xff3232,
             size: 25,
@@ -13,19 +13,19 @@ export default class{
             bound: 250,
             count: 12,
             gap: 0.005,
-            lineOpacity: 0.4,
+            lineOpacity: 0.5,
             moveGroupOpacity: [
                 1, // triangle
-                0.6 // vertical line
+                0.6, // vertical line
+                1 // plane
             ],
-            length: 100
+            length: 100,
+            planeWidth: 1920 * 0.04,
+            planeHeight: 1080 * 0.025
         }
 
-        console.log(camera)
-
         this.tw = []
-        this.mouse = new THREE.Vector2()
-        this.raycaster = new THREE.Raycaster()
+        this.ctx = []
 
         this.init(group)
     }
@@ -35,7 +35,6 @@ export default class{
     init(group){
         this.create(group)
         // this.initTween()
-        window.addEventListener('mousemove', (e) => this.onMousemove(e))
     }
 
 
@@ -65,6 +64,14 @@ export default class{
             // vertical line
             const verLine = this.createVertLineMesh(0)
             moveGroup.add(verLine)
+
+            // plane
+            const plane = this.createPlaneMesh(i)
+            // plane.rotation.y = 90 * RADIAN
+            plane.position.y = -(1 / (Math.sqrt(3) * 2)) * this.param.size / 2
+            plane.position.z = this.param.length + this.param.planeHeight / 2
+            plane.rotation.x = 90 * RADIAN
+            moveGroup.add(plane)
 
             localGroup.position.set(Math.random() * this.param.width - this.param.width / 2, Math.random() * this.param.height - this.param.height / 2, 0)
 
@@ -147,6 +154,30 @@ export default class{
         geometry.setAttribute('position', new THREE.BufferAttribute(position, 3))
 
         return geometry
+    }
+    // plane
+    createPlaneMesh(idx){
+        const geometry = this.createPlaneGeometry()
+        const material = this.createPlaneMaterial(idx)
+        return new THREE.Mesh(geometry, material)
+    }
+    createPlaneGeometry(){
+        return new THREE.PlaneGeometry(this.param.planeWidth, this.param.planeHeight)
+    }
+    createPlaneMaterial(idx){
+        this.ctx[idx] = METHOD.createCanvasTexture({width: this.param.planeWidth, height: this.param.planeHeight})
+        const texture = new THREE.CanvasTexture(this.ctx[idx].canvas)
+        texture.needsUpdate = true
+
+        return new THREE.MeshBasicMaterial({
+            map: texture,
+            transparent: true,
+            opacity: 0,
+            depthWrite: false,
+            depthTest: false,
+            blending: THREE.AdditiveBlending,
+            side: THREE.DoubleSide
+        })
     }
 
 
@@ -248,14 +279,7 @@ export default class{
         }
     }
 
-
-    // event
-    onMousemove(e){
-        this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1
-        this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1
-    }
-
-
+    
     // animate
     animate({camera}){
         // console.log(camera.position)
@@ -265,5 +289,11 @@ export default class{
         //     intersects[i].object.material.color = new THREE.Color(0x32eaff)
         // }
         // console.log(intersects.length)
+        const planes = this.wrapper.children[0].children.map(child => child.children[1].children[2])
+
+        this.ctx.forEach((ctx, i) => {
+            METHOD.drawCanvasTexture(ctx)
+            planes[i].material.map.needsUpdate = true
+        })
     }
 }

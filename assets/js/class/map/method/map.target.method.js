@@ -59,5 +59,22 @@ export default {
         }
 
         return {position, draw: len}
+    },
+    createCanvasTexture({width, height}){
+        const ctx = document.createElement('canvas').getContext('2d')
+        ctx.canvas.width = width
+        ctx.canvas.height = height
+        return ctx
+    },
+    drawCanvasTexture(ctx){
+        const {width, height} = ctx.canvas
+
+        ctx.clearRect(0, 0, width, height)
+
+        ctx.font = '14px Arial'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillStyle = 'red'
+        ctx.fillText(~~(window.performance.now()), width / 2, height / 2)
     }
 }
