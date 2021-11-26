@@ -15,6 +15,7 @@ import KR from '../../data/kr_points.min.js'
 import US from '../../data/us_points.min.js'
 import CN from '../../data/cn_points.min.js'
 import UK from '../../data/uk_points.min.js'
+import RU from '../../data/ru_points.min.js'
 
 export default class{
     constructor(){
@@ -40,10 +41,11 @@ export default class{
 
         this.map = {
             jp: JP,
-            uk: UK,
             kr: KR,
             us: US,
             cn: CN,
+            uk: UK,
+            ru: RU,
         }
         this.mapIndex = 0
 
