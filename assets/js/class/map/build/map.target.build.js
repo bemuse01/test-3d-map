@@ -16,7 +16,7 @@ export default class{
             lineOpacity: 0.5,
             moveGroupOpacity: [
                 1, // triangle
-                0.6, // vertical line
+                0.25, // vertical line
                 1 // plane
             ],
             length: 100,
@@ -26,6 +26,7 @@ export default class{
 
         this.tw = []
         this.ctx = []
+        this.texture = []
 
         this.init(group)
     }
@@ -166,11 +167,10 @@ export default class{
     }
     createPlaneMaterial(idx){
         this.ctx[idx] = METHOD.createCanvasTexture({width: this.param.planeWidth, height: this.param.planeHeight})
-        const texture = new THREE.CanvasTexture(this.ctx[idx].canvas)
-        texture.needsUpdate = true
+        this.texture[idx] = new THREE.CanvasTexture(this.ctx[idx].canvas)
 
         return new THREE.MeshBasicMaterial({
-            map: texture,
+            map: this.texture[idx],
             transparent: true,
             opacity: 0,
             depthWrite: false,
@@ -271,6 +271,9 @@ export default class{
 
         moveGroup.position.set(start.x, start.y, 0)
         line.geometry.setDrawRange(0, currentDist / dist * line.geometry.draw)
+
+        METHOD.drawCanvasTexture(this.ctx[idx], currentDist.toFixed(2))
+        this.texture[idx].needsUpdate = true
     }
     removeMoveTween(){
         for(let i = 0; i < this.tw.length; i++){
@@ -289,11 +292,8 @@ export default class{
         //     intersects[i].object.material.color = new THREE.Color(0x32eaff)
         // }
         // console.log(intersects.length)
-        const planes = this.wrapper.children[0].children.map(child => child.children[1].children[2])
 
-        this.ctx.forEach((ctx, i) => {
-            METHOD.drawCanvasTexture(ctx)
-            planes[i].material.map.needsUpdate = true
-        })
+        const planes = this.wrapper.children[0].children.map(child => child.children[1].children[2])
+        planes.forEach(plane => plane.lookAt(camera.position))
     }
 }

@@ -66,15 +66,16 @@ export default {
         ctx.canvas.height = height
         return ctx
     },
-    drawCanvasTexture(ctx){
+    drawCanvasTexture(ctx, txt){
         const {width, height} = ctx.canvas
 
         ctx.clearRect(0, 0, width, height)
 
-        ctx.font = '14px Arial'
+        ctx.font = '10px Arial'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.fillStyle = '#ff3232'
-        ctx.fillText(~~(window.performance.now()), width / 2, height / 2)
+        // ctx.fillText(~~(window.performance.now()), width / 2, height / 2)
+        ctx.fillText(txt, width / 2, height / 2)
     }
 }
