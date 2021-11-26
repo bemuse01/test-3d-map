@@ -13,6 +13,8 @@ import TARGET from './build/map.target.build.js'
 import JP from '../../data/jp_points.min.js'
 import KR from '../../data/kr_points.min.js'
 import US from '../../data/us_points.min.js'
+import CN from '../../data/cn_points.min.js'
+import UK from '../../data/uk_points.min.js'
 
 export default class{
     constructor(){
@@ -38,8 +40,10 @@ export default class{
 
         this.map = {
             jp: JP,
+            uk: UK,
             kr: KR,
-            us: US
+            us: US,
+            cn: CN,
         }
         this.mapIndex = 0
 
@@ -144,7 +148,7 @@ export default class{
 
             group.rotation.x = PARAM.rotation * RADIAN
 
-            this.comp[module] = new instance({group, size: this.size, map: this.map.jp, parent: this, proxy: this.proxy, camera: this.camera})
+            this.comp[module] = new instance({group, size: this.size, map: this.map[Object.keys(this.map)[0]], parent: this, proxy: this.proxy, camera: this.camera})
         }
     }
 
