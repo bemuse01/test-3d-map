@@ -3,7 +3,7 @@ import METHOD from '../method/map.target.method.js'
 import CHILD_PARAM from '../param/map.child.param.js'
 
 export default class{
-    constructor({group}){
+    constructor({group, camera}){
         this.param = {
             color: 0xff3232,
             size: 25,
@@ -21,8 +21,13 @@ export default class{
             ],
             length: 100,
             planeWidth: ~~(1920 * 0.02),
-            planeHeight: ~~(1080 * 0.02)
+            planeHeight: ~~(1080 * 0.03),
+            font: 'OpenSansRegular',
+            fontSize: '10px',
+            fontColor: '#ff3232'
         }
+
+        this.camera = camera
 
         this.tw = []
         this.ctx = []
@@ -272,7 +277,8 @@ export default class{
         moveGroup.position.set(start.x, start.y, 0)
         line.geometry.setDrawRange(0, currentDist / dist * line.geometry.draw)
 
-        METHOD.drawCanvasTexture(this.ctx[idx], currentDist.toFixed(2))
+        moveGroup.children[2].lookAt(this.camera.position)
+        METHOD.drawCanvasTexture(this.ctx[idx], currentDist.toFixed(2), 'F - ' + idx, this.param)
         this.texture[idx].needsUpdate = true
     }
     removeMoveTween(){
@@ -293,7 +299,7 @@ export default class{
         // }
         // console.log(intersects.length)
 
-        const planes = this.wrapper.children[0].children.map(child => child.children[1].children[2])
-        planes.forEach(plane => plane.lookAt(camera.position))
+        // const planes = this.wrapper.children[0].children.map(child => child.children[1].children[2])
+        // planes.forEach(plane => plane.lookAt(camera.position))
     }
 }
