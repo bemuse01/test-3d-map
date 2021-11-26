@@ -17,7 +17,8 @@ export default class{
             moveGroupOpacity: [
                 1, // triangle
                 0.25, // vertical line
-                1 // plane
+                1, // plane
+                0 // effect
             ],
             length: 100,
             planeWidth: ~~(1920 * 0.02),
@@ -30,6 +31,7 @@ export default class{
         this.camera = camera
 
         this.tw = []
+        this.effect = []
         this.ctx = []
         this.texture = []
 
@@ -73,11 +75,16 @@ export default class{
 
             // plane
             const plane = this.createPlaneMesh(i)
-            // plane.rotation.y = 90 * RADIAN
             plane.position.y = -(1 / (Math.sqrt(3) * 2)) * this.param.size / 2
             plane.position.z = this.param.length + this.param.planeHeight / 2
             plane.rotation.x = 90 * RADIAN
             moveGroup.add(plane)
+
+            // effect 
+            const effect = this.createTriMesh()
+            effect.position.y = (1 / (Math.sqrt(3) * 2)) * this.param.size / 2
+            effect.position.z = -1
+            moveGroup.add(effect) 
 
             localGroup.position.set(Math.random() * this.param.width - this.param.width / 2, Math.random() * this.param.height - this.param.height / 2, 0)
 
@@ -181,7 +188,7 @@ export default class{
             depthWrite: false,
             depthTest: false,
             blending: THREE.AdditiveBlending,
-            side: THREE.DoubleSide
+            // side: THREE.DoubleSide
         })
     }
 
@@ -212,22 +219,19 @@ export default class{
         })
     }
     startOpenTween({line, moveGroup, x, y, theta}){
-        // const [tri, verLine] = moveGroup.children
-
         moveGroup.position.set(x, y, 0)
         moveGroup.rotation.z = theta + 90 * RADIAN
         
         line.geometry.dispose()
         line.geometry = this.createLineGeometry({x, y})
         line.material.opacity = this.param.lineOpacity
-
-        // tri.rotation.z = theta + 90 * RADIAN
     }
     updateOpenTween(moveGroup, {opacity}){
         moveGroup.children.forEach((child, i) => child.material.opacity = opacity * this.param.moveGroupOpacity[i])
     }
     completeOpenTween(line, moveGroup, route, idx){
         this.createMoveTween(line, moveGroup, route, idx)
+        this.createEffectTween(moveGroup, idx)
     }
     // close
     createCloseTween(){
@@ -235,8 +239,6 @@ export default class{
 
         children.forEach((group, i) => {
             const [line, moveGroup] = group.children
-
-            const route = METHOD.createRoute(this.param)
 
             const start = {opacity: 1}
             const end = {opacity: [0, 1, 0]}
@@ -284,13 +286,30 @@ export default class{
     removeMoveTween(){
         for(let i = 0; i < this.tw.length; i++){
             TWEEN.remove(this.tw[i])
+            TWEEN.remove(this.effect[i])
             // this.tw[i] = null
         }
+    }
+    // effect
+    createEffectTween(moveGroup, idx){
+        const effect = moveGroup.children[3]
+        const start = {scale: 0.5, opacity: 0}
+        const end = {scale: 2.5, opacity: [0, 1, 0.5, 0.25, 0]}
+
+        this.effect[idx] = new TWEEN.Tween(start)
+        .to(end, 2000)
+        .onUpdate(() => this.updateEffectTween(effect, start))
+        .repeat(Infinity)
+        .start()
+    }
+    updateEffectTween(effect, {scale, opacity}){
+        effect.scale.set(scale, scale, 1)
+        effect.material.opacity = opacity
     }
 
     
     // animate
-    animate({camera}){
+    // animate({camera}){
         // console.log(camera.position)
         // this.raycaster.set(new THREE.Vector3(0, 0, 1000), new THREE.Vector3(0, 0, -1))
         // const intersects = this.raycaster.intersectObjects(this.wrapper.children[0].children.map(child => child.children[1]))
@@ -301,5 +320,5 @@ export default class{
 
         // const planes = this.wrapper.children[0].children.map(child => child.children[1].children[2])
         // planes.forEach(plane => plane.lookAt(camera.position))
-    }
+    // }
 }
