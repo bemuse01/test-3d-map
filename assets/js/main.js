@@ -1,5 +1,6 @@
 import APP from './class/app/app.js'
 import MAP from './class/map/map.js'
+import OPEN from './class/open/open.js'
 
 new Vue({
     el: '#wrap',
@@ -7,7 +8,8 @@ new Vue({
         return{
             modules: {
                 app: APP,
-                map: MAP
+                map: MAP,
+                open: OPEN
             }
         }
     },
