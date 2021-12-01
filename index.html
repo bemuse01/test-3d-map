@@ -31,7 +31,18 @@
 
                 <div class="ui open">
                     <div class="open-element-container">
-                        
+
+                        <div class="open-element open-text-container">
+                            <ul class="open-text">
+                                <li 
+                                    v-for="i in getElement('open', 'text')"
+                                    :key="i.key"
+                                    :style="i.style"
+                                ><span>{{i.text + ' ' + i.loading}}</span>
+                                </li>
+                            </ul>
+                        </div>
+
                     </div>
                 </div>
 

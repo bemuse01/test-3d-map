@@ -6,19 +6,33 @@ new Vue({
     el: '#wrap',
     data(){
         return{
-            modules: {
+            objectModules: {
                 app: APP,
-                map: MAP,
+                map: MAP
+            },
+            elementModules: {
                 open: OPEN
+            },
+            elements: {
+                open: null
             }
         }
     },
     mounted(){
         this.init()
     },
+    computed: {
+        getElement(){
+            return (name, child) => {
+                if(!this.elements[name]) return []
+                else return this.elements[name].get(child)
+            }
+        } 
+    },
     methods: {
         init(){
             this.initThree()
+            this.initElement()
             this.animate()
 
             window.addEventListener('resize', this.onWindowResize, false)
@@ -27,20 +41,20 @@ new Vue({
 
         // three
         initThree(){
-            for(const module in this.modules){
-                const instance = this.modules[module]
+            for(const module in this.objectModules){
+                const instance = this.objectModules[module]
                 
                 OBJECT[module] = new instance(OBJECT)
             }
         },
         resizeThree(){
-            for(let i in OBJECT){
+            for(const i in OBJECT){
                 if(!OBJECT[i].resize) continue
                 OBJECT[i].resize(OBJECT)
             }
         },
         renderThree(){
-            for(let i in OBJECT){
+            for(const i in OBJECT){
                 if(!OBJECT[i].animate) continue
                 OBJECT[i].animate(OBJECT)
             }
@@ -48,15 +62,23 @@ new Vue({
 
 
         // element
-        animateElement(){
-            for(let i in this.element){
-                if(!this.element[i].animate) continue
-                this.element[i].animate(OBJECT)
-            }
+        addElement(){
+            for(const module in this.elementModules){
+                this.elements[module] = null
+            } 
         },
-        onClickProgress(e){
-            const {audio} = OBJECT
-            this.element.progress.group.hover.onClick(e, audio)
+        initElement(){
+            for(const module in this.elementModules){
+                const instance = this.elementModules[module]
+
+                this.elements[module] = new instance(OBJECT)
+            }  
+        },
+        animateElement(){
+            for(const i in this.elements){
+                if(!this.elements[i].animate) continue
+                this.elements[i].animate(OBJECT)
+            }
         },
 
 

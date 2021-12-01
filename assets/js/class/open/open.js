@@ -37,4 +37,19 @@ export default class{
             this.comp[module] = new instance()
         }
     }
+
+
+    // animate
+    animate(){
+        for(const comp in this.comp){
+            if(!this.comp[comp].animate) continue
+            this.comp[comp].animate()
+        }
+    }
+
+
+    // get
+    get(name){
+        return this.comp[name].get()
+    }
 }
