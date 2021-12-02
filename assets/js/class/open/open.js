@@ -2,6 +2,7 @@ import TEXT from './build/open.text.build.js'
 
 export default class{
     constructor({map}){
+        this.parentElement = document.querySelector('.open')
         this.element = document.querySelector('.open-element-container')
 
         this.modules = {
@@ -75,6 +76,7 @@ export default class{
     // event
     onTransitionend(){
         this.mapProxy.play = true
+        this.parentElement.style.display = 'none'
         this.element.style.display = 'none'
     } 
 
