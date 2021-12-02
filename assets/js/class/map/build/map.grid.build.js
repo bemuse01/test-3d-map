@@ -9,7 +9,7 @@ export default class{
             width: 1600,
             height: 1600,
             seg: 12 - 1,
-            zdist: 150
+            zdist: 120
         }
 
         this.init(group)
