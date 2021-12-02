@@ -11,6 +11,12 @@
     src: url('../font/OpenSans-Regular.ttf');
 }
 
+
+/* hide vue syntax when load */
+[v-cloak] {display: none;}
+
+
+/* init */
 html{
     font-size: 10px;
 }
