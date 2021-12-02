@@ -118,6 +118,7 @@ export default class{
 
                 // when open close, play map
                 if(prop === 'play' && obj['play'] === true){
+                    self.updateTimes()
                     self.executeChild()
                 }
 
@@ -163,6 +164,7 @@ export default class{
 
     // interval
     intervalStopTween(){
+        // interval after open close
         if(!this.play){
             this.oldTime = window.performance.now()
             return
@@ -190,6 +192,10 @@ export default class{
             if(!this.comp[comp].close) continue
             this.comp[comp].close(this.group[comp])
         }
+    }
+    updateTimes(){
+        this.oldTime = window.performance.now()
+        this.currentTime = window.performance.now()
     }
 
 

@@ -75,7 +75,7 @@ export default class{
     // event
     onTransitionend(){
         this.mapProxy.play = true
-        this.parentElement.style.display = 'none'
+        this.element.style.display = 'none'
     } 
 
 
