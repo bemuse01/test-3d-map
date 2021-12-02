@@ -11,7 +11,9 @@
     src: url('../font/OpenSans-Regular.ttf');
 }
 
-
+html{
+    font-size: 10px;
+}
 *{
     margin: 0;
     padding: 0;
@@ -22,7 +24,7 @@ body{
     position: absolute;
     color: #32eaff;
     font-family: RobotoMonoRegular;
-    font-size: 14px;
+    font-size: 1.4rem;
 }
 ul{
     text-decoration: none;
@@ -68,6 +70,10 @@ div.open-text-container{
     left: 50%;
     transform: translate(-50%, -50%);
 }
+ul.open-text li{
+    text-overflow: clip;
+    white-space: nowrap;
+}
 
 
 
@@ -88,3 +94,9 @@ div.map-object{
     width: 100%;
     height: 100%;
 }
+
+
+/* media query */
+@media only screen and (max-width: 600px) { html{font-size: 9px;} }
+@media only screen and (max-width: 601px) and (min-width: 1279px) { html{font-size: 10px;} }
+@media only screen and (min-width: 1280px) { html{font-size: 10px;} }
