@@ -1,5 +1,8 @@
 export default class{
-    constructor(){
+    constructor({proxy}){
+        this.parentProxy = proxy
+        this.element = document.querySelector('.open-text')
+
         this.iter = 6
         this.load = [
             Array.from({length: this.iter}, () => '-'), 
@@ -10,11 +13,13 @@ export default class{
         this.loadIdx = 0
 
         this.texts = [
+            'Checking authority...',
             'Intializing system...',
             'Optimizing system...',
+            'Checking data...',
             'Accessing data...',
-            'Synchronizing targets...',
-            'Loading maps...',
+            'Synchronizing data...',
+            'Loading data...',
             'Waiting...',
             'Complete.'
         ]
@@ -25,14 +30,17 @@ export default class{
         this.y = (this.len * 100 / 2) / this.len
         this.ry = (this.len * 100) / this.len
 
-        // this.init()
+        this.currentTime = window.performance.now()
+        this.oldTime = window.performance.now()
+        this.playInterval = true
+
+        this.init()
     }
 
 
     // init
     init(){
         this.create()
-        setTimeout(() => this.setTimer(), 1000) 
     }
 
 
@@ -43,17 +51,24 @@ export default class{
             text,
             loading: '',
             style: {
-                opacity: i === this.currentIdx ? 1.0 : 0,
+                opacity: i === this.currentIdx ? 1 : 0,
                 transform: `translateY(${this.y * this.len}%)`
             },
-            timer: Math.random() * 500 + 500,
-            play: true
+            timer: Math.random() * 900 + 100,
+            done: i === this.len - 1 ? '' : 'ok'
         }))
     }
 
 
-    // timer
-    setTimer(){
+    // interval
+    setInterval(){
+        this.currentTime = window.performance.now()
+        if(this.currentTime - this.oldTime > this.el[this.currentIdx].timer){
+            this.showLoadingTexts()
+            this.oldTime = this.currentTime
+        }
+    }
+    showLoadingTexts(){
         this.currentIdx++
 
         this.el.forEach((e, i) => {
@@ -63,22 +78,51 @@ export default class{
 
             e.style.transform = `translateY(${this.y * this.len - 100 * this.currentIdx}%)`
         })
-
-        if(this.currentIdx === this.el.length - 1) return
-        setTimeout(() => this.setTimer(), 1000)
     }
 
 
     // animate
     animate(){
-        this.executeLoading()
+        if(!this.playInterval) return
+
+        this.playLoading()
+        this.setInterval()
     }
-    executeLoading(){
-        this.el.forEach(e => {
-            e.loading = this.load[this.loadIdx]
+    playLoading(){
+        this.el.forEach((e, i) => {
+            if(i === this.currentIdx) e.loading = this.load[this.loadIdx]
+            else e.loading = e.done
+            
+            if(i === this.currentIdx && this.currentIdx === this.len - 1) {
+                e.loading = e.done
+                this.createTween()
+                this.playInterval = false
+            }
         })
 
         this.loadIdx = (this.loadIdx + 1) % this.load.length
+    }
+
+
+    // tween
+    createTween(){
+        const start = {opacity: 1}
+        const end = {opacity: [0, 1, 0, 1, 0, 1, 0]}
+
+        const tw = new TWEEN.Tween(start)
+        .delay(1000)
+        .to(end, 250)
+        .onUpdate(() => this.updateTween(start))
+        .onComplete(() => this.completeTween())
+        .start()
+    }
+    updateTween({opacity}){
+        this.element.style.opacity = opacity
+    }
+    completeTween(){
+        // setTimeout(() => this.parentProxy.text = true, 600)
+        // this.parentProxy.text = true
+        this.parentProxy.text = true
     }
 
 

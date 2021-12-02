@@ -101,19 +101,25 @@ export default class{
     initProxy(){
         const self = this
         
-        const isTweenPlay = {
+        const proxyObj = {
+            play: false,
             child: false,
             epicenter: false,
             connection: false,
             // target: false
         }
 
-        this.proxy = new Proxy(isTweenPlay, {
+        this.proxy = new Proxy(proxyObj, {
             isAllTrue(obj){
                 return Object.keys(obj).every(key => obj[key] === true)
             },
             set(obj, prop, value){
                 obj[prop] = value
+
+                // when open close, play map
+                if(prop === 'play' && obj['play'] === true){
+                    self.executeChild()
+                }
 
                 // start tweens after child tween done
                 if(prop === 'child' && obj['child'] === true){
@@ -171,6 +177,9 @@ export default class{
 
 
     // execute
+    executeChild(){
+        this.comp.child.open(this.group.child)
+    }
     executeTween(){
         this.comp.epicenter.initTween()
         this.comp.connection.initTween()
@@ -195,7 +204,10 @@ export default class{
         }
     }
     setProxyToFalse(){
-        for(const proxy in this.proxy) this.proxy[proxy] = false
+        for(const proxy in this.proxy){
+            if(proxy === 'play') continue
+            this.proxy[proxy] = false
+        }
     }
 
 

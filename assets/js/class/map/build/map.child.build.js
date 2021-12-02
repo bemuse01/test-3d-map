@@ -12,7 +12,7 @@ export default class{
         this.parent = parent
         this.parentProxy = proxy
 
-        this.init(group)
+        // this.init(group)
     }
 
 

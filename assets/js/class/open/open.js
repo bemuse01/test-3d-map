@@ -2,13 +2,15 @@ import TEXT from './build/open.text.build.js'
 
 export default class{
     constructor({map}){
+        this.element = document.querySelector('.open-element-container')
+
         this.modules = {
             text: TEXT,
         }
 
         this.comp = {}
 
-        this.isOpenEnd = false
+        this.isOpenDone = false
 
         this.mapProxy = map.proxy
 
@@ -18,11 +20,33 @@ export default class{
 
     // init
     init(){
-        this.initElement()
+        this.initProxy()
         this.create()
+
+        this.element.addEventListener('transitionend', () => this.onTransitionend())
     }
-    initElement(){
-        this.element = document.querySelector('.open-element-container')
+    initProxy(){
+        const self = this
+        
+        const proxyObj = {
+            text: false
+        }
+
+        this.proxy = new Proxy(proxyObj, {
+            isAllTrue(obj){
+                return Object.keys(obj).every(key => obj[key] === true)
+            },
+            set(obj, prop, value){
+                obj[prop] = value
+
+                // when open's comps all true, close open and show map
+                if(this.isAllTrue(obj)){
+                    self.element.style.opacity = 0
+                }
+                
+                return true
+            }
+        })
     }
 
 
@@ -34,7 +58,7 @@ export default class{
         for(const module in this.modules){
             const instance = this.modules[module]
 
-            this.comp[module] = new instance()
+            this.comp[module] = new instance({element: this.element, proxy: this.proxy})
         }
     }
 
@@ -46,6 +70,13 @@ export default class{
             this.comp[comp].animate()
         }
     }
+
+
+    // event
+    onTransitionend(){
+        this.mapProxy.play = true
+        this.parentElement.style.display = 'none'
+    } 
 
 
     // get
