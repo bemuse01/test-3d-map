@@ -102,6 +102,17 @@ div.map-object{
 }
 
 
+/* left */
+div.left{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate(0, -50%);
+    width: 50vmax;
+    height: 95vmin;
+}
+
+
 /* media query */
 @media only screen and (max-width: 600px) { html{font-size: 9px;} }
 @media only screen and (max-width: 601px) and (min-width: 1279px) { html{font-size: 10px;} }
