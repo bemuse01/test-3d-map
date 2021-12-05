@@ -1,6 +1,7 @@
 import APP from './class/app/app.js'
 import MAP from './class/map/map.js'
 import OPEN from './class/open/open.js'
+import LEFT from './class/left/left.js'
 
 new Vue({
     el: '#wrap',
@@ -11,7 +12,8 @@ new Vue({
                 map: MAP
             },
             elementModules: {
-                open: OPEN
+                open: OPEN,
+                left: LEFT
             },
             elements: {
                 open: null

@@ -1,8 +1,11 @@
+import PLAYER from './build/left.player.build.js'
+
 export default class{
     constructor(){
         this.element = document.querySelector('.left')
 
         this.modules = {
+            // player: PLAYER
         }
 
         this.comp = {}
