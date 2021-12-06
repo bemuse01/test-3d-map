@@ -1,5 +1,5 @@
 export default {
-    getMusicName(music){
+    getMusicTitle(music){
         return music.split('/').pop()
     },
     getMusicDuration(audio, musicSrc){

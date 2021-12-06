@@ -8,30 +8,94 @@ div.left{
     height: 95vmin;
     display: flex;
     flex-direction: row;
+    font-family: RobotoRegular;
 }
 
-/* left column */
-/* div.left-column{
+
+
+/* left section */
+/* div.left-section{
 
 } */
 
-/* left column 1 */
-div.left-column-1{
+
+
+/* left section 1 */
+div.left-section-1{
     display: flex;
     flex-direction: column;
     width: 35rem;
     gap: 30px;
 }
-div.left-column-1 > div{
+div.left-section-1 > div{
     width: 100%;
 }
 
-/* left player */
+
+
+/* left player container */
 div.left-player-container{
     flex: 0.85;
     /* box-sizing: border-box; */
     /* border: 1px solid #32eaff44; */
 }
+
+/* left player */
+div.left-player{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+div.left-player > div{
+    width: 100%;
+}
+
+/* left player controller */
+div.left-player-control{
+    height: 100px;
+    position: sticky;
+}
+
+/* left player play list */
+div.left-player-list{
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* left player music */
+div.left-player-list-music{
+    width: 100%;
+    height: 25px;
+    margin-bottom: 6px;
+    display: flex;
+    gap: 12px;
+    opacity: 0.5;
+    cursor: pointer;
+    background: transparent;
+}
+div.left-player-list-music:hover{
+    opacity: 1.0;
+    background: #32eaff22;
+}
+div.left-player-list-music > div{
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+}
+/* left player music title */
+div.left-player-list-music > div:nth-child(1){
+    flex: 0.85;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+/* left player music duration */
+div.left-player-list-music > div:nth-child(2){
+    flex: 0.15;
+}
+
+
 
 /* left clock */
 div.left-clock-container{

@@ -5,7 +5,7 @@ export default class{
         this.element = document.querySelector('.left')
 
         this.modules = {
-            // player: PLAYER
+            player: PLAYER
         }
 
         this.comp = {}

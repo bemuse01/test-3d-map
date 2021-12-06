@@ -54,16 +54,20 @@
 
                 <div class="ui left">
 
-                    <div class="left-column left-column-1">
+                    <div class="left-section left-section-1">
 
                         <div class="left-container left-player-container">
                             <div class="left-player">
                                 <div class="left-player-control"></div>
                                 <div class="left-player-list">
                                     <div
+                                        class="left-player-list-music"
+                                        v-for="i in getElement('left', 'player')"
+                                        :key="i.key"
+                                        :style="i.style"
                                     >
-                                        <div><span></span></div>
-                                        <div><span></span></div>
+                                        <div><span>{{i.title}}</span></div>
+                                        <div><span>{{i.duration}}</span></div>
                                     </div>
                                 </div>
                             </div>
