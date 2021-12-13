@@ -1,12 +1,10 @@
-import TEXT from './build/open.text.build.js'
-
-export default class{
-    constructor({map}){
+class Open{
+    constructor({map, left, right}){
         this.parentElement = document.querySelector('.open')
         this.element = document.querySelector('.open-element-container')
 
         this.modules = {
-            text: TEXT,
+            text: OpenTextBuild,
         }
 
         this.comp = {}
@@ -14,6 +12,8 @@ export default class{
         this.isOpenDone = false
 
         this.mapProxy = map.proxy
+        this.leftProxy = left.proxy
+        this.rightProxy = right.proxy
 
         this.init()
     }
@@ -35,7 +35,7 @@ export default class{
 
         this.proxy = new Proxy(proxyObj, {
             isAllTrue(obj){
-                return Object.keys(obj).every(key => obj[key] === true)
+                return Object.keys(obj).filter(key => key !== 'element').every(key => obj[key] === true)
             },
             set(obj, prop, value){
                 obj[prop] = value
@@ -76,9 +76,11 @@ export default class{
     // event
     onTransitionend(){
         this.mapProxy.play = true
+        this.leftProxy.play = true
+        this.rightProxy.play = true
         this.parentElement.style.display = 'none'
         this.element.style.display = 'none'
-    } 
+    }
 
 
     // get

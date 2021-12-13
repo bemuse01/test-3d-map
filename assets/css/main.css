@@ -1,21 +1,32 @@
 @import './left.css';
+@import './right.css';
+@import './custom.css';
+@import './animation.css';
 
-@font-face {
+
+
+@font-face{
     font-family: RobotoRegular;
     src: url('../font/Roboto-Regular.ttf');
 }
-@font-face {
+@font-face{
     font-family: RobotoMonoRegular;
     src: url('../font/RobotoMono-Regular.ttf');
 }
-@font-face {
+@font-face{
+    font-family: RobotoThin;
+    src: url('../font/Roboto-Thin.ttf');
+}
+@font-face{
     font-family: OpenSansRegular;
     src: url('../font/OpenSans-Regular.ttf');
 }
 
 
+
 /* hide vue syntax when load */
 [v-cloak] {display: none;}
+
 
 
 /* init */
@@ -51,6 +62,13 @@ canvas#canvas{
     left: 0;
     /* filter: drop-shadow(0 0 10px #ffffff); */
 }
+/* for transforming */
+div#element{
+    position: absolute;
+    perspective: 2000px;
+    width: 100%;
+    height: 100%;
+}
 
 
 /* open */
@@ -81,7 +99,9 @@ div.open-text-container{
 ul.open-text li{
     text-overflow: clip;
     white-space: nowrap;
+    -webkit-white-space: nowrap;
 }
+
 
 
 /* map */
@@ -101,6 +121,7 @@ div.map-object{
     width: 100%;
     height: 100%;
 }
+
 
 
 /* media query */

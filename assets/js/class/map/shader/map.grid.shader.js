@@ -1,4 +1,4 @@
-export default {
+const MapGridShader = {
     vertex: `
         varying vec3 vPosition;
 

@@ -1,0 +1,30 @@
+/* left text container */
+div.left-text-container{
+    /* box-sizing: border-box; */
+    /* border: 1px solid #32eaff44; */
+    font-family: RobotoRegular;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 5px;
+    overflow: hidden;
+    /* height: 30%; */
+    flex: 1;
+    /* flex: 1; */
+    /* flex: 0.8; */
+}
+div.left-text3-container{
+    height: initial;
+    flex: 1.2;
+}
+
+
+/* left text */
+div.left-text{
+    font-size: 1.2rem;
+    overflow: hidden;
+    color: #32eaff;
+}
+div.left-text span{
+    white-space: nowrap;
+    text-overflow: clip;
+}

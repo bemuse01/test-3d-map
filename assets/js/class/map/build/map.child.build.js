@@ -1,13 +1,12 @@
-import * as THREE from '../../../lib/three.module.js'
-import PUBLIC_METHOD from '../../../method/method.js'
-import METHOD from '../method/map.child.method.js' 
-import PARAM from '../param/map.child.param.js'
+// import PUBLIC_METHOD from '../../../method/method.js'
+// import METHOD from '../method/map.child.method.js' 
+// import MapChildParam from '../param/map.child.param.js'
 
-export default class{
-    constructor({group, map, parent, proxy}){
+class MapChildBuild{
+    constructor({map, parent, proxy}){
         this.map = map
 
-        this.index = METHOD.createIndex(~~(this.map.coordinates.length * PARAM.div), this.map.coordinates.length)
+        this.index = MapChildMethod.createIndex(~~(this.map.coordinates.length * MapChildParam.div), this.map.coordinates.length)
 
         this.parent = parent
         this.parentProxy = proxy
@@ -25,7 +24,7 @@ export default class{
 
     // open
     open(group){
-        this.index = METHOD.createIndex(~~(this.map.coordinates.length * PARAM.div), this.map.coordinates.length)
+        this.index = MapChildMethod.createIndex(~~(this.map.coordinates.length * MapChildParam.div), this.map.coordinates.length)
 
         this.init(group)
     }
@@ -45,7 +44,7 @@ export default class{
 
         this.setMeshProps(plane)
         
-        positionGroup.position.set(PARAM.width / -2, PARAM.height / 2 + PARAM.y, 0)
+        positionGroup.position.set(MapChildParam.width / -2, MapChildParam.height / 2 + MapChildParam.y, 0)
 
         positionGroup.add(plane)
         this.wrapper.add(positionGroup)
@@ -58,11 +57,11 @@ export default class{
         return new THREE.InstancedMesh(geometry, material, this.map.coordinates.length)
     }
     createPlaneGeometry(){
-        return new THREE.BoxGeometry(PARAM.size, PARAM.size, PARAM.size)
+        return new THREE.BoxGeometry(MapChildParam.size, MapChildParam.size, MapChildParam.size)
     }
     createPlaneMaterial(){
         return new THREE.MeshBasicMaterial({
-            // color: PARAM.color,
+            // color: MapChildParam.color,
             transparent: true,
             opacity: 1.0,
             depthWrite: false,
@@ -76,8 +75,8 @@ export default class{
         this.map.coordinates.forEach((data, i) => {
             const {rx, ry} = data
 
-            const x = rx * PARAM.width
-            const y = ry * -PARAM.height
+            const x = rx * MapChildParam.width
+            const y = ry * -MapChildParam.height
 
             const matrix = new THREE.Matrix4()
             
@@ -87,7 +86,7 @@ export default class{
             
             matrix.multiply(new THREE.Matrix4().makeTranslation(x, y, 0))
             matrix.multiply(new THREE.Matrix4().makeScale(1, 1, scale))
-            matrix.multiply(new THREE.Matrix4().makeTranslation(0, 0, PARAM.size / 2))
+            matrix.multiply(new THREE.Matrix4().makeTranslation(0, 0, MapChildParam.size / 2))
 
             plane.setMatrixAt(i, matrix)
             plane.setColorAt(i, new THREE.Color(`hsl(186, 100%, 0%)`))
@@ -96,7 +95,7 @@ export default class{
             // if(i === 80 || i === 503) plane.setColorAt(i, new THREE.Color(0xffffff))
             
             // edge
-            // const planeEdge = this.createEdgeMesh(new THREE.BoxGeometry(PARAM.size, PARAM.size, PARAM.size))
+            // const planeEdge = this.createEdgeMesh(new THREE.BoxGeometry(MapChildParam.size, MapChildParam.size, MapChildParam.size))
             // planeEdge.applyMatrix4(matrix)
 
             // positionGroup.add(planeEdge)
@@ -116,7 +115,7 @@ export default class{
     }
     createEdgeMaterial(){
         return new THREE.LineBasicMaterial({
-            color: PARAM.color,
+            color: MapChildParam.color,
             transparent: true,
             depthWrite: false,
             depthTest: false,

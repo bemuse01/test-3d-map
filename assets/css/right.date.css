@@ -1,0 +1,29 @@
+div.right-date-container{
+    flex: 0.15;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: RobotoThin;
+}
+
+
+
+div.right-date{
+    width: 100%;
+    height: 100%;
+    font-size: 6rem;
+    display: flex;
+    flex-direction: column;
+}
+    div.right-date > div{
+        display: flex;
+    }
+    div.date-border-top{
+        justify-content: left;
+    }
+    div.date-border-bottom{
+        justify-content: right;
+    }
+        div.date-border > div{
+            width: 15%;
+        }

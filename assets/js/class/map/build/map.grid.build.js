@@ -1,8 +1,8 @@
-import * as THREE from '../../../lib/three.module.js'
-import CHILD_PARAM from '../param/map.child.param.js'
-import SHADER from '../shader/map.grid.shader.js'
+// import * as THREE from '../../../lib/three.module.js'
+// import CHILD_PARAM from '../param/map.child.param.js'
+// import SHADER from '../shader/map.grid.shader.js'
 
-export default class{
+class MapGridBuild{
     constructor({group}){
         this.param = {
             color: 0x32eaff,
@@ -52,7 +52,7 @@ export default class{
             }
         }
                 
-        positionGroup.position.set(0, CHILD_PARAM.y, 0)
+        positionGroup.position.set(0, MapChildParam.y, 0)
 
         this.wrapper.add(positionGroup)
         group.add(this.wrapper)
@@ -78,15 +78,15 @@ export default class{
         //     opacity: 0.2
         // })
         return new THREE.ShaderMaterial({
-            vertexShader: SHADER.vertex,
-            fragmentShader: SHADER.fragment,
+            vertexShader: MapGridShader.vertex,
+            fragmentShader: MapGridShader.fragment,
             transparent: true,
             depthTest: false,
             depthWrite: false,
             uniforms: {
                 uColor: {value: new THREE.Color(this.param.color)},
                 uDist: {value: this.param.width / 2.0},
-                uOpacity: {value: 0.4},
+                uOpacity: {value: 0.45},
                 uZdist: {value: this.param.zdist}
             }
         })

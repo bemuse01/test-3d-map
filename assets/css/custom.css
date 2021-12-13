@@ -1,0 +1,32 @@
+/* input range */
+input[type="range"]{
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    background: transparent;
+}
+input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #32eaff;
+}
+
+
+
+/* scrollbar */
+::-webkit-scrollbar{
+    width: 4px;
+}
+::-webkit-scrollbar-track{
+    background: transparent; 
+}
+::-webkit-scrollbar-thumb{
+    background: #32eaff55;
+}
+::-webkit-scrollbar-thumb:hover{
+    background: #32eaffaa;
+}

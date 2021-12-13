@@ -1,0 +1,181 @@
+/* left player container */
+div.left-player-container{
+    flex: 0.85;
+    /* box-sizing: border-box; */
+    /* border: 1px solid #32eaff44; */
+}
+
+
+/* left player */
+div.left-player{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: linear-gradient(transparent, #32eaff11);
+}
+    div.left-player > div{
+        width: 100%;
+    }
+
+
+/* left player control */
+div.left-player-control{
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+    div.left-player-control > div{
+        width: 100%;
+    }
+
+    /* left player control title */
+    div.left-player-control-currentTitle{
+        font-size: 16px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    /* left player control progress */
+    div.left-player-control-progress{
+        position: relative;
+        display: flex;
+        height: 10px;
+        align-items: center;
+    }
+        div.left-player-control-progress > div{
+            position: absolute;
+        }
+
+    /* left player control button */
+    div.left-player-control-button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+    }
+        div.player-button-container{
+            width: 90%;
+            height: 90%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        div.player-button{
+            flex: 1 0 auto;
+            box-sizing: border-box;
+            border: 2px solid #32eaff;
+            border-radius: 50%;
+            opacity: 0.5;
+            cursor: pointer;
+        }
+        div.player-button:after{
+            content: '';
+            display: block;
+            padding-bottom: 100%;
+        }
+        div.player-button:hover{
+            opacity: 1.0;
+        }
+        div.small-button{
+            transform: scale(0.7);
+        }
+        div.middle-button{
+            transform: scale(0.85);
+        }
+        div.player-prev-button{
+            background: url('../src/prev.png') no-repeat center center / cover;
+        }
+        div.player-type-button{
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+        }
+        div.player-play-button{
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+        }
+        div.player-stop-button{
+            background: url('../src/stop.png') no-repeat center center / cover;
+        }
+        div.player-next-button{
+            background: url('../src/next.png') no-repeat center center / cover;
+        }
+
+    /* left player control volume */
+    div.left-player-control-volume{
+        position: relative;
+        display: flex;
+        height: 10px;
+        align-items: center;
+    }
+        div.left-player-control-volume > *{
+            position: absolute;
+        }
+        input.player-volume-controlCircle{
+            display: block;
+            width: 100%;
+            cursor: pointer;
+        }
+
+
+/* left player play list */
+div.left-player-list{
+    flex: 1 1 auto;
+    height: 0;
+    overflow-y: auto;
+}
+
+    /* left player music */
+    div.left-player-list-music{
+        width: 100%;
+        height: 25px;
+        padding: 3px;
+        display: flex;
+        gap: 12px;
+        opacity: 0.5;
+        cursor: pointer;
+        background: transparent;
+        box-sizing: border-box;
+    }
+    div.left-player-list-music:hover{
+        opacity: 1.0;
+        background: #32eaff22;
+    }
+    div.left-player-list-music > div{
+        vertical-align: middle;
+        display: flex;
+        align-items: center;
+    }
+
+    /* left player music title */
+    div.left-player-list-music > div:nth-child(1){
+        flex: 0.85;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    /* left player music duration */
+    div.left-player-list-music > div:nth-child(2){
+        flex: 0.15;
+        text-align: right;
+        justify-content: right;
+    }
+
+
+/* left player visualizer */
+div.left-player-visualizer{
+    height: 200px;
+}
+    div.left-player-visualizer > canvas{
+        width: 100%;
+        height: 100%;
+        transform: scaleY(-1) 
+    }

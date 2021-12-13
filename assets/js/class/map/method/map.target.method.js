@@ -1,7 +1,7 @@
-import * as THREE from '../../../lib/three.module.js'
-import PUBLIC_METHOD from '../../../method/method.js'
+// import * as THREE from '../../../lib/three.module.js'
+// import PUBLIC_METHOD from '../../../method/method.js'
 
-export default {
+const MapTargetMethod = {
     createAttribute({size}){
         const position = new Float32Array(3 * 3)
 

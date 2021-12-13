@@ -1,6 +1,6 @@
-import PUBLIC_METHOD from '../../../method/method.js'
+// import PUBLIC_METHOD from '../../../method/method.js'
 
-export default {
+const MapChildMethod = {
     createIndex(div, len){
         const arr = PUBLIC_METHOD.shuffle(Array.from({length: len}, (_, i) => i))
         const temp = []

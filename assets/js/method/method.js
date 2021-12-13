@@ -1,4 +1,4 @@
-export default {
+const PUBLIC_METHOD = {
     normalize(x, a, b, min, max){
         return (b - a) * (x - min) / (max - min) + a 
     },

@@ -1,8 +1,8 @@
-import * as THREE from '../../../lib/three.module.js'
-import {Reflector} from '../../../lib/Reflector.js'
-import CHILD_PARAM from '../param/map.child.param.js'
+// import * as THREE from '../../../lib/three.module.js'
+// import {Reflector} from '../../../lib/Reflector.js'
+// import CHILD_PARAM from '../param/map.child.param.js'
 
-export default class{
+class MapMirrorBuild{
     constructor({group, size}){
         this.param = {
             opacity: 0.25
@@ -41,10 +41,10 @@ export default class{
         return reflector
     }
     createGeometry(){
-        return new THREE.PlaneGeometry(CHILD_PARAM.width * 2, CHILD_PARAM.height * 2)
+        return new THREE.PlaneGeometry(MapChildParam.width * 2, MapChildParam.height * 2)
     }
     createReflector(geometry){
-        return new Reflector(geometry, {
+        return new THREE.Reflector(geometry, {
             clipBias: 0.003,
             textureWidth: this.size.el.w * RATIO,
             textureHeight: this.size.el.h * RATIO,

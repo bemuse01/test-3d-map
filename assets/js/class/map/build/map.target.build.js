@@ -1,8 +1,8 @@
-import * as THREE from '../../../lib/three.module.js'
-import METHOD from '../method/map.target.method.js'
-import CHILD_PARAM from '../param/map.child.param.js'
+// import * as THREE from '../../../lib/three.module.js'
+// import METHOD from '../method/map.target.method.js'
+// import CHILD_PARAM from '../param/map.child.param.js'
 
-export default class{
+class MapTargetBuild{
     constructor({group, camera}){
         this.param = {
             color: 0xff3232,
@@ -11,7 +11,7 @@ export default class{
             width: 600,
             height: 600,
             bound: 300,
-            count: 12,
+            count: 11,
             gap: 0.005,
             lineOpacity: 0.5,
             moveGroupOpacity: [
@@ -34,6 +34,7 @@ export default class{
         this.effect = []
         this.ctx = []
         this.texture = []
+        this.currentDist = Array.from({length: this.param.count}, () => 0)
 
         this.init(group)
     }
@@ -92,7 +93,7 @@ export default class{
             positionGroup.add(localGroup)
         }
 
-        positionGroup.position.set(0, CHILD_PARAM.y, this.param.z)
+        positionGroup.position.set(0, MapChildParam.y, this.param.z)
 
         this.wrapper.add(positionGroup)
         group.add(this.wrapper)
@@ -106,7 +107,7 @@ export default class{
     createTriGeometry(){
         const geometry = new THREE.BufferGeometry()
 
-        const {position} = METHOD.createAttribute(this.param)
+        const {position} = MapTargetMethod.createAttribute(this.param)
 
         geometry.setAttribute('position', new THREE.BufferAttribute(position, 3))
 
@@ -132,7 +133,7 @@ export default class{
     createLineGeometry({x, y} = {}){
         const geometry = new THREE.BufferGeometry()
         
-        const {position, draw} = METHOD.createLineAttribute({x, y, ...this.param})
+        const {position, draw} = MapTargetMethod.createLineAttribute({x, y, ...this.param})
 
         geometry.setAttribute('position', new THREE.BufferAttribute(position, 3))
         geometry.attributes.position.needsUpdate = true
@@ -178,7 +179,7 @@ export default class{
         return new THREE.PlaneGeometry(this.param.planeWidth, this.param.planeHeight)
     }
     createPlaneMaterial(idx){
-        this.ctx[idx] = METHOD.createCanvasTexture({width: this.param.planeWidth, height: this.param.planeHeight})
+        this.ctx[idx] = MapTargetMethod.createCanvasTexture({width: this.param.planeWidth, height: this.param.planeHeight})
         this.texture[idx] = new THREE.CanvasTexture(this.ctx[idx].canvas)
 
         return new THREE.MeshBasicMaterial({
@@ -204,7 +205,7 @@ export default class{
         children.forEach((localGroup, i) => {
             const [line, moveGroup] = localGroup.children
 
-            const route = METHOD.createRoute(this.param)
+            const route = MapTargetMethod.createRoute(this.param)
 
             const start = {opacity: 0}
             const end = {opacity: [1, 0, 1, 0, 1]}
@@ -276,11 +277,13 @@ export default class{
     updateMoveTween({line, moveGroup, dist, start, x, y, idx}){
         const currentDist = Math.sqrt((x - start.x) ** 2 + (y - start.y) ** 2)
 
+        this.currentDist[idx] = currentDist
+
         moveGroup.position.set(start.x, start.y, 0)
         line.geometry.setDrawRange(0, currentDist / dist * line.geometry.draw)
 
         moveGroup.children[2].lookAt(this.camera.position)
-        METHOD.drawCanvasTexture(this.ctx[idx], currentDist.toFixed(2), 'F - ' + idx, this.param)
+        MapTargetMethod.drawCanvasTexture(this.ctx[idx], currentDist.toFixed(2), 'F - ' + idx, this.param)
         this.texture[idx].needsUpdate = true
     }
     removeMoveTween(){

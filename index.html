@@ -9,16 +9,80 @@
 
         <!-- lib -->
         <script src="assets/js/lib/vue.min.js"></script>
+        <script src="assets/js/lib/three.min.js"></script>
+        <script src="assets/js/lib/Reflector.js"></script>
         <script src="assets/js/lib/tween.umd.js"></script>
         <script src="assets/js/lib/simplex-noise.2.3.0.min.js"></script>
+        <script src="assets/js/lib/cubic-spline.js"></script>
+
+
+        <!-- data -->
+        <script src="assets/js/data/us_points.min.js"></script>
+        <script src="assets/js/data/uk_points.min.js"></script>
+        <script src="assets/js/data/ru_points.min.js"></script>
+        <script src="assets/js/data/kr_points.min.js"></script>
+        <script src="assets/js/data/jp_points.min.js"></script>
+        <script src="assets/js/data/cn_points.min.js"></script>
 
 
         <!-- const -->
         <script src="assets/js/const/const.js"></script>
 
 
+        <!-- method -->
+        <script src="assets/js/method/method.js"></script>
+
+
         <!-- object -->
         <script src="assets/js/object/object.js"></script>
+
+
+        <!-- class -->
+        <!-- app -->
+        <script src="assets/js/class/app/app.js"></script>
+
+        <!-- open build -->
+        <script src="assets/js/class/open/build/open.text.build.js"></script>
+        <!-- open -->
+        <script src="assets/js/class/open/open.js"></script>
+
+        <!-- left method -->
+        <script src="assets/js/class/left/method/left.player.method.js"></script>
+        <script src="assets/js/class/left/method/left.text.method.js"></script>
+        <script src="assets/js/class/left/method/left.visualizer.method.js"></script>
+        <!-- left build -->
+        <script src="assets/js/class/left/build/left.clock.build.js"></script>
+        <script src="assets/js/class/left/build/left.player.build.js"></script>
+        <script src="assets/js/class/left/build/left.text.build.js"></script>
+        <script src="assets/js/class/left/build/left.visualizer.build.js"></script>
+        <!-- left -->
+        <script src="assets/js/class/left/left.js"></script>
+
+        <!-- right build -->
+        <script src="assets/js/class/right/build/right.date.js"></script>
+        <script src="assets/js/class/right/build/right.status.js"></script>
+        <!-- right -->
+        <script src="assets/js/class/right/right.js"></script>
+
+        <!-- map method -->
+        <script src="assets/js/class/map/method/map.child.method.js"></script>
+        <script src="assets/js/class/map/method/map.connection.method.js"></script>
+        <script src="assets/js/class/map/method/map.target.method.js"></script>
+        <!-- map param -->
+        <script src="assets/js/class/map/param/map.param.js"></script>
+        <script src="assets/js/class/map/param/map.child.param.js"></script>
+        <!-- map shader -->
+        <script src="assets/js/class/map/shader/map.grid.shader.js"></script>
+        <!-- map build -->
+        <script src="assets/js/class/map/build/map.child.build.js"></script>
+        <script src="assets/js/class/map/build/map.connection.build.js"></script>
+        <script src="assets/js/class/map/build/map.epicenter.build.js"></script>
+        <script src="assets/js/class/map/build/map.grid.build.js"></script>
+        <script src="assets/js/class/map/build/map.mirror.build.js"></script>
+        <script src="assets/js/class/map/build/map.radar.build.js"></script>
+        <script src="assets/js/class/map/build/map.target.build.js"></script>
+        <!-- map -->
+        <script src="assets/js/class/map/map.js"></script>
     </head>
     <body>
         <div id="wrap" v-cloak>
@@ -56,25 +120,230 @@
 
                     <div class="left-section left-section-1">
 
-                        <div class="left-container left-player-container">
+                        <div 
+                            class="left-container left-player-container"
+                            :style="getStyle('left', 'player')"
+                        >
                             <div class="left-player">
-                                <div class="left-player-control"></div>
+
+                                <div class="left-player-control">
+                                    <div class="left-player-control-currentTitle"><span>{{currentMusicTitle}}</span></div>
+                                    <div class="left-player-control-progress">
+                                        <div class="trackBar player-progress-trackBar"></div>
+                                        <div 
+                                            class="currentBar player-progress-currentBar" 
+                                            :style="currentAudioTime"
+                                        ></div>
+                                    </div>
+                                    <div class="left-player-control-button">
+                                        <div class="player-button-container">
+                                            <div 
+                                                class="player-button small-button player-prev-button"
+                                                @click="onClickPrevButton()"
+                                            ></div>
+                                            <div 
+                                                class="player-button middle-button player-type-button"
+                                                :style="toggleTypeButtonImage"
+                                                @click="onClickTypeButton()"
+                                            ></div>
+                                            <div
+                                                class="player-button player-play-button"
+                                                :style="togglePlayButtonImage"
+                                                @click="onClickPlayButton()"
+                                            ></div>
+                                            <div 
+                                                class="player-button middle-button player-stop-button"
+                                                @click="onClickStopButton()"
+                                            ></div>
+                                            <div 
+                                                class="player-button small-button player-next-button"
+                                                @click="onClickNextButton()"
+                                            ></div>
+                                        </div>
+                                    </div>
+                                    <div class="left-player-control-volume">
+                                        <div class="trackBar player-volume-trackBar"></div>
+                                        <div 
+                                            class="currentBar player-volume-currentBar"
+                                            :style="currentVolumeBar"
+                                        ></div>
+                                        <input class="controlCircle player-volume-controlCircle" type="range" min="0" max="100" v-model="volume">
+                                    </div>
+                                </div>
+
                                 <div class="left-player-list">
                                     <div
                                         class="left-player-list-music"
                                         v-for="i in getElement('left', 'player')"
                                         :key="i.key"
                                         :style="i.style"
+                                        @click="playAudio(i.key)"
                                     >
                                         <div><span>{{i.title}}</span></div>
                                         <div><span>{{i.duration}}</span></div>
                                     </div>
                                 </div>
+                                
+                                <div class="left-player-visualizer">
+                                    <canvas></canvas>
+                                </div>
+                                
                             </div>
                         </div>
 
-                        <div class="left-container left-clock-container">
-                            <div class="left-clock"></div>
+                        <div 
+                            class="left-container left-clock-container"
+                            :style="getStyle('left', 'clock')"
+                        >
+                            <div class="left-clock">
+                                <div class="clock-border clock-border-top"><div></div></div>
+                                <div class="clock-display"><span>{{currentTime}}</span></div>
+                                <div class="clock-border clock-border-bottom"><div></div></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="left-section left-section-2">
+
+                        <div class="left-container left-border-container top-border"></div>
+
+                        <div 
+                            class="left-container left-version-container"
+                            :style="getStyle('left', 'player')"
+                        >
+                            <span>V.2021.12.11.00.53</span>
+                        </div>
+
+                        <div class="left-container left-text-container left-text1-container">
+                            <div 
+                                class="left-text"
+                                v-for="i in getElement('left', 'text3')"
+                                :key="i.key"
+                                :style="i.style"
+                            ><span>{{i.text}}</span>
+                            </div>
+                        </div>
+
+                        <div class="left-container left-text-container left-text2-container">
+                            <div 
+                                class="left-text"
+                                v-for="i in getElement('left', 'text2')"
+                                :key="i.key"
+                                :style="i.style"
+                            ><span>{{i.text}}</span>
+                            </div>
+                        </div>
+
+                        <div class="left-container left-text-container left-text3-container">
+                            <div 
+                                class="left-text"
+                                v-for="i in getElement('left', 'text')"
+                                :key="i.key"
+                                :style="i.style"
+                            ><span>{{i.text}}</span>
+                            </div>
+                        </div>
+
+                        <!-- <div class="left-container left-border-container bottom-border"></div> -->
+                    
+                    </div>
+
+                </div>
+
+                <div class="ui right">
+
+                    <div class="right-section right-section-1">
+
+                        <div class="right-container right-status-container">
+                            <div 
+                                class="right-status-wrap" 
+                                v-for="i in getElement('right', 'status')"
+                                :key="i.key"
+                            >
+                                <div class="right-status"
+                                    v-for="j in i.child"
+                                    :key="j.key"
+                                >
+
+                                    <div 
+                                        class="status-border"
+                                        :style="j.style.border"
+                                    >
+                                        <div><div></div></div>
+                                        <div><div></div></div>
+                                    </div>
+
+                                    <div class="status-box">
+
+                                        <div 
+                                            class="status-border status-box-border"
+                                            :style="j.style.border"
+                                        >
+                                            <div><div></div></div>
+                                            <div><div></div></div>
+                                        </div>
+
+                                        <div class="status-wrapper">
+                                            <div class="status-wrapper-box">
+
+                                                <div class="status-top">
+                                                    <div 
+                                                        class="status-top-text"
+                                                        :style="j.style.topText"
+                                                    >
+                                                        <div><span>{{j.name}}</span></div>
+                                                        <div><span>{{j.uuid}}</span></div>
+                                                        <div><span>{{j.dist}}</span></div>
+                                                    </div>
+                                                    <div class="status-top-graph">
+                                                        <div
+                                                            v-for="k in j.style.topGraph"
+                                                            :style="k"
+                                                        ></div>
+                                                    </div>
+                                                </div>
+                                                <div class="status-bottom">
+                                                    <div
+                                                        v-for="k in j.style.bottom"
+                                                        :style="k"
+                                                    ></div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div 
+                                            class="status-border status-box-border"
+                                            :style="j.style.border"
+                                        >
+                                            <div><div></div></div>
+                                            <div><div></div></div>
+                                        </div>
+
+                                    </div>
+
+                                    <div 
+                                        class="status-border"
+                                        :style="j.style.border"
+                                    >
+                                        <div><div></div></div>
+                                        <div><div></div></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div 
+                            class="right-container right-date-container"
+                            :style="getStyle('right', 'date')"
+                        >
+                            <div class="right-date">
+                                <div class="clock-border clock-border-top date-border date-border-top"><div></div></div>
+                                <div class="clock-display date-display"><span>{{currentDate}}</span></div>
+                                <div class="clock-border clock-border-bottom date-border date-border-bottom"><div></div></div>
+                            </div>
                         </div>
 
                     </div>
@@ -84,6 +353,6 @@
             </div>
 
         </div>
-        <script src="assets/js/main.js" type="module"></script>
+        <script src="./assets/js/main.js"></script>
     </body>
 </html>

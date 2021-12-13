@@ -1,0 +1,133 @@
+div.right-status-container{
+    display: flex;
+    flex-direction: column;
+    flex: 0.85;
+    gap: 16px;
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+div.right-status-container span{
+    white-space: nowrap;
+    text-overflow: clip;
+}
+
+
+div.right-status-wrap{
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+
+div.right-status{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+    div.status-border{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 1px;
+    }
+        div.status-border > div{
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+        }
+        div.status-border > div:nth-child(2){
+            justify-content: flex-end;
+        }
+            div.status-border > div > div{
+                border-top: 1px solid #32eaffaa;
+                box-sizing: border-box;
+                width: 6px;
+            }
+
+    div.status-box{
+        display: flex;
+        width: 100%;
+        flex: 1;
+        flex-direction: row;
+    }
+
+        div.status-box-border{
+            width: 1px;
+            height: 100%;
+            flex-direction: column;
+        }
+            div.status-box-border > div{
+                flex-direction: column;
+            }
+                div.status-box-border > div > div{
+                    border-top: initial;
+                    border-left: 1px solid #32eaffaa;
+                    height: 6px;
+                }
+
+
+        div.status-wrapper{
+            display: flex;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+            div.status-wrapper-box{
+                width: 93%;
+                height: 83%;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+                div.status-wrapper-box > div{
+                    display: flex;
+                    width: 100%;
+                }
+
+                div.status-top{
+                    flex: 0.7;
+                    display: flex;
+                    flex-direction: row;
+                    gap: 5px;
+                }
+                    div.status-top > div{
+                        flex: 0.7;
+                    }
+                    div.status-top > div:nth-child(2){
+                        flex: 0.3;
+                    }
+
+                    div.status-top-text{
+                        display: flex;
+                        flex-direction: column;
+                        gap: 4px;
+                    }
+
+                    div.status-top-graph{
+                        display: flex;
+                        flex-direction: row;
+                        gap: 4px;
+                        transform: scaleY(-1);
+                    }
+                        div.status-top-graph > div{
+                            flex: 1;
+                        }
+
+                div.status-bottom{
+                    flex: 0.3;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1px;
+                }
+                    div.status-bottom > div{
+                        flex: 1;
+                    }

@@ -1,0 +1,8 @@
+@keyframes blank{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}

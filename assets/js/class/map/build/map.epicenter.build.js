@@ -1,12 +1,12 @@
-import * as THREE from '../../../lib/three.module.js'
-import CHILD_PARAM from '../param/map.child.param.js'
+// import * as THREE from '../../../lib/three.module.js'
+// import CHILD_PARAM from '../param/map.child.param.js'
 
-export default class{
+class MapEpicenterBuild{
     constructor({group, map, parent, proxy}){
         this.param = {
             color: 0xff3232,
-            count: 8,
-            iter: 4,
+            count: 7,
+            iter: 3,
             size: 10,
             seg: 32,
             z: 50
@@ -42,8 +42,8 @@ export default class{
 
             const {rx, ry} = coordinates[random]
 
-            const x = rx * CHILD_PARAM.width
-            const y = ry * -CHILD_PARAM.height
+            const x = rx * MapChildParam.width
+            const y = ry * -MapChildParam.height
 
             for(let j = 0; j < this.param.iter; j++){
                 const mesh = this.createMesh()
@@ -55,7 +55,7 @@ export default class{
             positionGroup.add(local)
         }
 
-        positionGroup.position.set(CHILD_PARAM.width / -2, CHILD_PARAM.height / 2 + CHILD_PARAM.y, 0)
+        positionGroup.position.set(MapChildParam.width / -2, MapChildParam.height / 2 + MapChildParam.y, 0)
 
         this.wrapper.add(positionGroup)
         group.add(this.wrapper)
@@ -127,8 +127,8 @@ export default class{
             children.forEach(child => {
                 const {rx, ry} = coordinates[random]
     
-                const x = rx * CHILD_PARAM.width
-                const y = ry * -CHILD_PARAM.height
+                const x = rx * MapChildParam.width
+                const y = ry * -MapChildParam.height
     
                 child.position.set(x, y, this.param.z)
             })

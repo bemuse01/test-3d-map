@@ -1,0 +1,57 @@
+@import './right.status.css';
+@import './right.date.css';
+
+
+
+/* right */
+div.right{
+    position: absolute;
+    top: 50%;
+    width: 50rem;
+
+
+    /* normal */
+    /* transform: translate(0, -50%);
+    height: 95vmin;
+    right: 16px; */
+
+
+    /* transform */
+    height: 80vmin;
+    transform: translate(0, -50%) rotateY(-54deg);
+    right: 4px;
+
+
+    display: flex;
+    flex-direction: column;
+    font-family: RobotoRegular;
+    color: #32eaff;
+    align-items: center;
+    gap: 20px;
+}
+
+
+/* right section */
+/* div.right-section{
+
+} */
+
+
+
+/* right section 1 */
+div.right-section-1{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 30px;
+    flex: 1;
+}
+/* div.right-section-1 > div{
+    width: 100%;
+} */
+
+
+
+/* right section 2 */
+/* div.right-section-2{
+} */

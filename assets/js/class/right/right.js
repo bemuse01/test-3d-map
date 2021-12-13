@@ -1,39 +1,13 @@
-// import PLAYER from './build/left.player.build.js'
-// import VISUALIZER from './build/left.visualizer.build.js'
-// import CLOCK from './build/left.clock.build.js'
-// import TEXT from './build/left.text.build.js'
+// import STATUS from './build/right.status.js'
+// import DATE from './build/right.date.js'
 
-class Left{
-    constructor({musics}){
-        this.musics = musics
-
-        this.element = document.querySelector('.left')
+class Right{
+    constructor({}){
+        this.element = document.querySelector('.right')
 
         this.modules = {
-            player: {name: LeftPlayerBuild},
-            visualizer: {name: LeftVisulizerBuild},
-            clock: {name: LeftClockBuild},
-            text: {
-                name: LeftTextBuild,
-                param: {
-                    type: 'ip',
-                    count: 14
-                }
-            },
-            text2: {
-                name: LeftTextBuild,
-                param: {
-                    type: 'uuid',
-                    count: 10
-                }
-            },
-            text3: {
-                name: LeftTextBuild,
-                param: {
-                    type: 'encode',
-                    count: 10
-                }
-            }
+            status: {name: RightStatusBuild},
+            date: {name: RightDateBuild}
         }
 
         this.comp = {}
@@ -90,15 +64,6 @@ class Left{
             const parameter = param ? param : {}
 
             this.comp[module] = new name({element: this.element, proxy: this.proxy, musics: this.musics, ...parameter})
-        }
-    }
-
-
-    // animate
-    animate(){
-        for(const comp in this.comp){
-            if(!this.comp[comp].animate) continue
-            this.comp[comp].animate(this.comp)
         }
     }
 

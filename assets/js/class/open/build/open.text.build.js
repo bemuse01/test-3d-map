@@ -1,4 +1,4 @@
-export default class{
+class OpenTextBuild{
     constructor({proxy}){
         this.parentProxy = proxy
         this.element = document.querySelector('.open-text')

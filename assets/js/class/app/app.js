@@ -1,6 +1,6 @@
-import * as THREE from '../../lib/three.module.js'
+// import * as THREE from '../../lib/three.module.js'
 
-export default class{
+class App{
     constructor(){
         this.wrap = document.getElementById('wrap')
 

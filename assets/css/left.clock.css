@@ -1,0 +1,47 @@
+/* left clock */
+div.left-clock-container{
+    flex: 0.15;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: RobotoThin;
+}
+
+
+/* left clock */
+div.left-clock{
+    width: 100%;
+    height: 100%;
+    font-size: 7rem;
+    display: flex;
+    flex-direction: column;
+}
+    div.left-clock > div{
+        display: flex;
+    }
+    div.clock-display{
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+    }
+    div.clock-border{
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        flex-direction: row;
+    }
+    div.clock-border-top{
+        justify-content: right;
+    }
+    div.clock-border-bottom{
+        justify-content: left;
+    }
+        div.clock-border > div{
+            width: 20%;
+        }
+        div.clock-border-top > div{
+            border-top: 2px solid #32eaff55;
+        }
+        div.clock-border-bottom > div{
+            border-bottom: 2px solid #32eaff55;
+        }

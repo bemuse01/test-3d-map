@@ -1,0 +1,19 @@
+/* left version container */
+div.left-version-container{
+    font-family: RobotoRegular;
+    display: flex;
+    overflow: hidden;
+    flex: 0.125;
+}
+
+
+/* left version */
+div.left-version{
+    font-size: 1.6rem;
+    overflow: hidden;
+    color: #32eaff;
+}
+div.left-version span{
+    white-space: nowrap;
+    text-overflow: clip;
+}

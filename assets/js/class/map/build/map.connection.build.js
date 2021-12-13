@@ -1,13 +1,13 @@
-import * as THREE from '../../../lib/three.module.js'
-import METHOD from '../method/map.connection.method.js'
-import CHILD_PARAM from '../param/map.child.param.js'
+// import * as THREE from '../../../lib/three.module.js'
+// import METHOD from '../method/map.connection.method.js'
+// import CHILD_PARAM from '../param/map.child.param.js'
 
-export default class{
+class MapConnectionBuild{
     constructor({group, map, parent, proxy}){
         this.param = {
             color: 0x32eaff,
             seg: 360,
-            count: 8,
+            count: 7,
             radius: 6,
             z: 50,
             lineTime: 1500,
@@ -56,7 +56,7 @@ export default class{
             effectGroup.add(effect)
         }
 
-        positionGroup.position.set(CHILD_PARAM.width / -2, CHILD_PARAM.height / 2 + CHILD_PARAM.y, this.param.z)
+        positionGroup.position.set(MapChildParam.width / -2, MapChildParam.height / 2 + MapChildParam.y, this.param.z)
 
         positionGroup.add(lineGroup)
         positionGroup.add(circleGroup)
@@ -156,7 +156,7 @@ export default class{
     createLineTween({line, circle, effect, idx}){
         this.play[idx] = true
 
-        const circleProp = METHOD.getCircleProp({coords: this.map, ...CHILD_PARAM})
+        const circleProp = MapConnectionMethod.getCircleProp({coords: this.map, ...MapChildParam})
 
         const start1 = {draw: 0}
         const end1 = {draw: this.param.seg}

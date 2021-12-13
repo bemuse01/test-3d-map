@@ -1,14 +1,49 @@
+@import './left.player.css';
+@import './left.clock.css';
+@import './left.text.css';
+@import './left.border.css';
+@import './left.version.css';
+
+
+
+div.trackBar{
+    width: 100%;
+    height: 2px;
+    background: #32eaff55;
+}
+div.currentBar{
+    width: 100%;
+    height: 2px;
+    background: #32eaff;
+    transform-origin: left;
+}
+
+
+
 /* left */
 div.left{
     position: absolute;
     top: 50%;
-    left: 16px;
-    transform: translate(0, -50%);
-    /* width: 50vmax; */
-    height: 95vmin;
+
+
+    /* normal */
+    /* transform: translate(0, -50%); */
+    /* height: 95vmin; */
+    /* left: 16px; */
+
+
+    /* transform */
+    height: 80vmin;
+    transform: translate(0, -50%) rotateY(54deg);
+    left: 4px;
+
+
     display: flex;
     flex-direction: row;
     font-family: RobotoRegular;
+    color: #32eaff;
+    align-items: center;
+    gap: 20px;
 }
 
 
@@ -25,6 +60,7 @@ div.left-section-1{
     display: flex;
     flex-direction: column;
     width: 35rem;
+    height: 100%;
     gap: 30px;
 }
 div.left-section-1 > div{
@@ -33,71 +69,13 @@ div.left-section-1 > div{
 
 
 
-/* left player container */
-div.left-player-container{
-    flex: 0.85;
-    /* box-sizing: border-box; */
-    /* border: 1px solid #32eaff44; */
-}
-
-/* left player */
-div.left-player{
-    width: 100%;
-    height: 100%;
+/* left section 2 */
+div.left-section-2{
     display: flex;
     flex-direction: column;
-}
-div.left-player > div{
-    width: 100%;
-}
-
-/* left player controller */
-div.left-player-control{
-    height: 100px;
-    position: sticky;
-}
-
-/* left player play list */
-div.left-player-list{
-    flex: 1;
-    overflow-y: auto;
-}
-
-/* left player music */
-div.left-player-list-music{
-    width: 100%;
-    height: 25px;
-    margin-bottom: 6px;
-    display: flex;
-    gap: 12px;
-    opacity: 0.5;
-    cursor: pointer;
-    background: transparent;
-}
-div.left-player-list-music:hover{
-    opacity: 1.0;
-    background: #32eaff22;
-}
-div.left-player-list-music > div{
-    vertical-align: middle;
-    display: flex;
-    align-items: center;
-}
-/* left player music title */
-div.left-player-list-music > div:nth-child(1){
-    flex: 0.85;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-/* left player music duration */
-div.left-player-list-music > div:nth-child(2){
-    flex: 0.15;
-}
-
-
-
-/* left clock */
-div.left-clock-container{
-    flex: 0.15;
+    /* align-items: flex-end; */
+    justify-content: end;
+    width: 30rem;
+    height: 100%;
+    gap: 14px;
 }

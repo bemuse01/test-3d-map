@@ -1,3 +1,3 @@
-export default {
+const MapParam = {
     rotation: -65
 }

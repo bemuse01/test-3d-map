@@ -1,10 +1,10 @@
-import * as THREE from '../../../lib/three.module.js'
+// import * as THREE from '../../../lib/three.module.js'
 
-export default class{
+class MapRadarBuild{
     constructor({group}){
         this.param = {
             color: 0x32eaff,
-            count: 4,
+            count: 3,
             size: 10,
             seg: 128
         }

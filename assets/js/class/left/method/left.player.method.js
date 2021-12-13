@@ -1,11 +1,10 @@
-export default {
-    getMusicTitle(music){
-        return music.split('/').pop()
-    },
-    getMusicDuration(audio, musicSrc){
-        audio.src = musicSrc
-        const min = audio.duration / 60
-        const sec = audio.duration % 60
+const LeftPlayerMethod = {
+    processMusicDuration(duration){
+        const min = this.addZero(~~(duration / 60) + '')
+        const sec = this.addZero(~~(duration % 60) + '')
         return `${min}:${sec}`
+    },
+    addZero(time){
+        return ('' + time).length < 2 ? '0' + time : '' + time
     }
 }

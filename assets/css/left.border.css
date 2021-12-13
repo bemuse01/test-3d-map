@@ -1,0 +1,12 @@
+/* left border */
+div.left-border-container{
+    width: 25%;
+    height: 2px;
+    box-sizing: border-box;
+    border-top: 2px solid #32eaff55;
+}
+
+
+/* div.top-border{
+    width: 60%;
+} */

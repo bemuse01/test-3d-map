@@ -1,6 +1,6 @@
-import PUBLIC_METHOD from '../../../method/method.js'
+// import PUBLIC_METHOD from '../../../method/method.js'
 
-export default {
+const MapConnectionMethod = {
     getCenterPosition(p1, p2, {width, height}){
         const xdist = Math.abs(p1.rx - p2.rx) / 2
         const ydist = Math.abs(p1.ry - p2.ry) / 2
