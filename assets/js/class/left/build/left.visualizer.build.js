@@ -17,6 +17,8 @@ class LeftVisulizerBuild{
         }
 
         this.index = Array.from({length: this.param.count}, (_, i) => i)
+
+        this.init()
     }
 
 
