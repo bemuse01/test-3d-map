@@ -10,7 +10,7 @@ class Left{
         this.element = document.querySelector('.left')
 
         this.modules = {
-            player: {name: LeftPlayerBuild},
+            // player: {name: LeftPlayerBuild},
             visualizer: {name: LeftVisulizerBuild},
             clock: {name: LeftClockBuild},
             text: {

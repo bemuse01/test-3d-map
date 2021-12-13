@@ -47,12 +47,12 @@
         <script src="assets/js/class/open/open.js"></script>
 
         <!-- left method -->
-        <script src="assets/js/class/left/method/left.player.method.js"></script>
+        <!-- <script src="assets/js/class/left/method/left.player.method.js"></script> -->
         <script src="assets/js/class/left/method/left.text.method.js"></script>
         <script src="assets/js/class/left/method/left.visualizer.method.js"></script>
         <!-- left build -->
         <script src="assets/js/class/left/build/left.clock.build.js"></script>
-        <script src="assets/js/class/left/build/left.player.build.js"></script>
+        <!-- <script src="assets/js/class/left/build/left.player.build.js"></script> -->
         <script src="assets/js/class/left/build/left.text.build.js"></script>
         <script src="assets/js/class/left/build/left.visualizer.build.js"></script>
         <!-- left -->
@@ -122,11 +122,11 @@
 
                         <div 
                             class="left-container left-player-container"
-                            :style="getStyle('left', 'player')"
+                            :style="getStyle('left', 'visualizer')"
                         >
                             <div class="left-player">
 
-                                <div class="left-player-control">
+                                <!-- <div class="left-player-control">
                                     <div class="left-player-control-currentTitle"><span>{{currentMusicTitle}}</span></div>
                                     <div class="left-player-control-progress">
                                         <div class="trackBar player-progress-trackBar"></div>
@@ -182,7 +182,7 @@
                                         <div><span>{{i.title}}</span></div>
                                         <div><span>{{i.duration}}</span></div>
                                     </div>
-                                </div>
+                                </div> -->
                                 
                                 <div class="left-player-visualizer">
                                     <canvas></canvas>
@@ -210,7 +210,7 @@
 
                         <div 
                             class="left-container left-version-container"
-                            :style="getStyle('left', 'player')"
+                            :style="getStyle('left', 'visualizer')"
                         >
                             <span>V.2021.12.11.00.53</span>
                         </div>

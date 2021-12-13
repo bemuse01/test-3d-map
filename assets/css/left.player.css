@@ -13,7 +13,7 @@ div.left-player{
     display: flex;
     flex-direction: column;
     gap: 6px;
-    background: linear-gradient(transparent, #32eaff11);
+    background: linear-gradient(to left, transparent, #32eaff11);
 }
     div.left-player > div{
         width: 100%;
@@ -172,10 +172,11 @@ div.left-player-list{
 
 /* left player visualizer */
 div.left-player-visualizer{
-    height: 200px;
+    /* height: ; */
+    flex: 1;
 }
     div.left-player-visualizer > canvas{
         width: 100%;
         height: 100%;
-        transform: scaleY(-1) 
+        /* transform: scaleY(-1)  */
     }
