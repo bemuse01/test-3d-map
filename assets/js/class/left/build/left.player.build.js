@@ -3,9 +3,9 @@ import METHOD from '../method/left.player.method.js'
 export default class{
     constructor({musicSrcs}){
         this.musicSrcs = musicSrcs || [
-            './assets/songs/Sawano Hiroyuki - CRY.mp3',
-            './assets/songs/Sawano Hiroyuki Feat. Laco - Hands Up to the Sky.mp3',
-            './assets/songs/Sawano Hiroyuki Feat.mizuki - Avid.mp3'
+            // './assets/songs/Sawano Hiroyuki - CRY.mp3',
+            // './assets/songs/Sawano Hiroyuki Feat. Laco - Hands Up to the Sky.mp3',
+            // './assets/songs/Sawano Hiroyuki Feat.mizuki - Avid.mp3'
         ]
         this.el = []
 
