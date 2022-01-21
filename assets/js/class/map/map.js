@@ -81,9 +81,6 @@ export default class{
 
         this.scene = new THREE.Scene()
 
-        const ambient = new THREE.AmbientLight(0xffffff)
-        this.scene.add(ambient)
-
         this.camera = new THREE.PerspectiveCamera(this.param.fov, width / height, this.param.near, this.param.far)
         this.camera.position.z = this.param.pos
         
